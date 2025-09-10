@@ -1,21 +1,29 @@
 package com.insurai.insurai.service;
 
-import com.insurai.insurai.dto.AgentAvailabilityRequest;
-import com.insurai.insurai.model.AgentAvailability;
-import com.insurai.insurai.model.AgentAvailabilityBreak;
-import com.insurai.insurai.repository.AgentAvailabilityRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.insurai.insurai.dto.AgentAvailabilityRequest;
+import com.insurai.insurai.dto.OnlineAgentDTO;
+import com.insurai.insurai.model.AgentAvailability;
+import com.insurai.insurai.model.AgentAvailabilityBreak;
+import com.insurai.insurai.model.User;
+import com.insurai.insurai.repository.AgentAvailabilityRepository;
+import com.insurai.insurai.repository.UserRepository;
 @Service
 public class AgentAvailabilityService {
 
     private final AgentAvailabilityRepository availabilityRepository;
+    private final UserRepository userRepository;
 
-    public AgentAvailabilityService(AgentAvailabilityRepository availabilityRepository) {
+    @Autowired
+    public AgentAvailabilityService(AgentAvailabilityRepository availabilityRepository, UserRepository userRepository) {
         this.availabilityRepository = availabilityRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional
@@ -25,8 +33,7 @@ public class AgentAvailabilityService {
         availability.setAvailabilityDate(request.getAvailabilityDate());
         availability.setStartTime(request.getStartTime());
         availability.setEndTime(request.getEndTime());
-        availability.setRecurring(request.getRecurring());
-        availability.setStatus(request.getStatus());
+        availability.setStatus("Available"); // Always set to Available
         availability.setNotes(request.getNotes());
 
         if (request.getBreaks() != null) {
@@ -46,5 +53,36 @@ public class AgentAvailabilityService {
 
     public List<AgentAvailability> getAvailabilityByAgentId(String agentId) {
         return availabilityRepository.findByAgentId(agentId);
+    }
+
+    public List<OnlineAgentDTO> getOnlineAgents() {
+        List<AgentAvailability> onlineAgents = availabilityRepository.findByStatus("Available");
+        System.out.println("DEBUG: Found " + onlineAgents.size() + " available agents");
+        return onlineAgents.stream().map(agent -> {
+            User user = userRepository.findById(agent.getAgentId()).orElse(null);
+            if (user == null) {
+                System.out.println("DEBUG: No user found for agentId: " + agent.getAgentId());
+            } else {
+                System.out.println("DEBUG: Found user " + user.getFirstName() + " " + user.getLastName() + " for agentId: " + agent.getAgentId());
+            }
+            OnlineAgentDTO dto = new OnlineAgentDTO();
+            if (user != null && "AGENT".equals(user.getCategory())) {
+                dto.setId(user.getId());
+                dto.setAgentId(user.getId());
+                dto.setEmail(user.getEmail());
+                dto.setFirstName(user.getFirstName());
+                dto.setLastName(user.getLastName());
+                dto.setPhone(user.getPhone());
+                dto.setFullName(user.getFirstName() + " " + user.getLastName());
+            } else {
+                dto.setId(agent.getAvailabilityId().toString());
+                dto.setAgentId(agent.getAgentId());
+                dto.setFullName(agent.getAgentId());
+            }
+            dto.setAvailabilityDate(agent.getAvailabilityDate().toString());
+            dto.setStartTime(agent.getStartTime().toString());
+            dto.setEndTime(agent.getEndTime().toString());
+            return dto;
+        }).collect(Collectors.toList());
     }
 }

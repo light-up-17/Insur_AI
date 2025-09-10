@@ -8,6 +8,10 @@ const Dashboard = ({ setUser }) => {
   const user = JSON.parse(localStorage.getItem("user"));
   const category = user?.category || "USER";
 
+  // Set agentId in localStorage if user is an agent
+  if (category === "AGENT" && user?.id) {
+    localStorage.setItem("agentId", user.id);
+  }
   const handleLogout = () => {
     localStorage.removeItem("user");
     setUser(null);   // ✅ clear React state

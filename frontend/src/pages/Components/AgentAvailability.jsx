@@ -1,6 +1,6 @@
 // src/pages/AgentAvailability.jsx
-import React, { useState } from "react";
-import { format } from "date-fns";
+import React, { useState, useEffect } from "react";
+import { format, isBefore, isAfter, parseISO } from "date-fns";
 
 export default function AgentAvailability() {
   const [availabilityList, setAvailabilityList] = useState([]);
@@ -8,13 +8,32 @@ export default function AgentAvailability() {
     date: "",
     startTime: "",
     endTime: "",
-    recurring: "None",
     breaks: [],
-    status: "Available",
     notes: "",
   });
 
   const agentId = localStorage.getItem("agentId");
+
+  // Fetch availability slots from backend
+  const fetchAvailability = async () => {
+    if (!agentId) return;
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/availability/${agentId}`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setAvailabilityList(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch availability:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAvailability();
+    // eslint-disable-next-line
+  }, [agentId]);
 
   // Reset form
   const resetForm = () => {
@@ -22,9 +41,7 @@ export default function AgentAvailability() {
       date: "",
       startTime: "",
       endTime: "",
-      recurring: "None",
       breaks: [],
-      status: "Available",
       notes: "",
     });
   };
@@ -41,14 +58,12 @@ export default function AgentAvailability() {
       return;
     }
 
-    // Prepare payload for backend
+    // Prepare payload for backend (no status field)
     const payload = {
       agentId: agentId,
       availabilityDate: form.date,
       startTime: form.startTime,
       endTime: form.endTime,
-      recurring: form.recurring,
-      status: form.status,
       notes: form.notes,
       breaks: form.breaks.map((b) => ({
         breakStart: b.start,
@@ -64,8 +79,7 @@ export default function AgentAvailability() {
       });
 
       if (response.ok) {
-        const savedSlot = await response.json();
-        setAvailabilityList([...availabilityList, savedSlot]);
+        await fetchAvailability();
         resetForm();
       } else {
         let errorMsg = "Failed to save availability";
@@ -81,9 +95,11 @@ export default function AgentAvailability() {
     }
   };
 
-  // Delete availability slot (frontend only)
+  // Delete availability slot (frontend only, you may want to implement backend delete)
   const deleteAvailability = (id) => {
-    setAvailabilityList(availabilityList.filter((slot) => slot.id !== id));
+    setAvailabilityList(
+      availabilityList.filter((slot) => slot.availabilityId !== id)
+    );
   };
 
   // Update form fields
@@ -107,9 +123,63 @@ export default function AgentAvailability() {
     setForm({ ...form, breaks: updatedBreaks });
   };
 
+  // Split slots into active and history
+  const now = new Date();
+  const activeSlots = availabilityList.filter((slot) => {
+    const slotDate =
+      typeof slot.availabilityDate === "string"
+        ? parseISO(slot.availabilityDate)
+        : slot.availabilityDate;
+    const endTime = slot.endTime || "23:59";
+    const slotEnd = new Date(slotDate);
+    if (endTime.length >= 5) {
+      const [h, m] = endTime.split(":");
+      slotEnd.setHours(Number(h), Number(m), 0, 0);
+    }
+    return isAfter(slotEnd, now);
+  });
+
+  const historySlots = availabilityList.filter((slot) => {
+    const slotDate =
+      typeof slot.availabilityDate === "string"
+        ? parseISO(slot.availabilityDate)
+        : slot.availabilityDate;
+    const endTime = slot.endTime || "23:59";
+    const slotEnd = new Date(slotDate);
+    if (endTime.length >= 5) {
+      const [h, m] = endTime.split(":");
+      slotEnd.setHours(Number(h), Number(m), 0, 0);
+    }
+    return isBefore(slotEnd, now);
+  });
+
+  // Determine agent's overall status
+  let agentStatus = "Unavailable";
+  if (activeSlots.some((slot) => slot.status === "Available")) {
+    agentStatus = "Available";
+  } else if (activeSlots.some((slot) => slot.status === "Booked")) {
+    agentStatus = "Booked";
+  }
+
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <h1 className="text-2xl font-bold mb-4">Agent Availability Management</h1>
+
+      {/* Agent Status Indicator */}
+      <div className="mb-4">
+        <span className="font-semibold">Current Status: </span>
+        <span
+          className={
+            agentStatus === "Available"
+              ? "text-green-600"
+              : agentStatus === "Booked"
+              ? "text-yellow-600"
+              : "text-red-600"
+          }
+        >
+          {agentStatus}
+        </span>
+      </div>
 
       {/* Form Section */}
       <div className="bg-white shadow-md rounded-xl p-6 mb-6">
@@ -150,38 +220,6 @@ export default function AgentAvailability() {
               onChange={handleChange}
               className="border rounded-lg p-2 w-full"
             />
-          </div>
-
-          {/* Recurring */}
-          <div>
-            <label className="block font-medium">Recurring</label>
-            <select
-              name="recurring"
-              value={form.recurring}
-              onChange={handleChange}
-              className="border rounded-lg p-2 w-full"
-            >
-              <option>None</option>
-              <option>Daily</option>
-              <option>Weekly</option>
-              <option>Custom (Mon, Wed, Fri)</option>
-            </select>
-          </div>
-
-          {/* Status */}
-          <div>
-            <label className="block font-medium">Status</label>
-            <select
-              name="status"
-              value={form.status}
-              onChange={handleChange}
-              className="border rounded-lg p-2 w-full"
-            >
-              <option>Available</option>
-              <option>Unavailable</option>
-              <option>Booked</option>
-              <option>On Leave</option>
-            </select>
           </div>
 
           {/* Notes */}
@@ -236,18 +274,17 @@ export default function AgentAvailability() {
         </button>
       </div>
 
-      {/* Availability List */}
-      <div className="bg-white shadow-md rounded-xl p-6">
-        <h2 className="text-lg font-semibold mb-3">Your Availability</h2>
-        {availabilityList.length === 0 ? (
-          <p className="text-gray-500">No availability slots added yet.</p>
+      {/* Active Availability List */}
+      <div className="bg-white shadow-md rounded-xl p-6 mb-6">
+        <h2 className="text-lg font-semibold mb-3">Active Slots</h2>
+        {activeSlots.length === 0 ? (
+          <p className="text-gray-500">No active availability slots.</p>
         ) : (
           <table className="w-full border">
             <thead>
               <tr className="bg-gray-100 text-left">
                 <th className="p-2 border">Date</th>
                 <th className="p-2 border">Time</th>
-                <th className="p-2 border">Recurring</th>
                 <th className="p-2 border">Breaks</th>
                 <th className="p-2 border">Status</th>
                 <th className="p-2 border">Notes</th>
@@ -255,17 +292,21 @@ export default function AgentAvailability() {
               </tr>
             </thead>
             <tbody>
-              {availabilityList.map((slot) => (
-                <tr key={slot.id} className="border-b">
+              {activeSlots.map((slot) => (
+                <tr key={slot.availabilityId} className="border-b">
                   <td className="p-2 border">
-                    {format(new Date(slot.availabilityDate), "dd/MM/yyyy")}
+                    {format(
+                      typeof slot.availabilityDate === "string"
+                        ? parseISO(slot.availabilityDate)
+                        : slot.availabilityDate,
+                      "dd/MM/yyyy"
+                    )}
                   </td>
                   <td className="p-2 border">
                     {slot.startTime} - {slot.endTime}
                   </td>
-                  <td className="p-2 border">{slot.recurring}</td>
                   <td className="p-2 border">
-                    {slot.breaks.length === 0
+                    {slot.breaks && slot.breaks.length === 0
                       ? "-"
                       : slot.breaks
                           .map((b) => `${b.breakStart} - ${b.breakEnd}`)
@@ -275,12 +316,58 @@ export default function AgentAvailability() {
                   <td className="p-2 border">{slot.notes || "-"}</td>
                   <td className="p-2 border">
                     <button
-                      onClick={() => deleteAvailability(slot.id)}
+                      onClick={() => deleteAvailability(slot.availabilityId)}
                       className="text-red-600 hover:underline"
                     >
                       Delete
                     </button>
                   </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+
+      {/* History List */}
+      <div className="bg-white shadow-md rounded-xl p-6">
+        <h2 className="text-lg font-semibold mb-3">History</h2>
+        {historySlots.length === 0 ? (
+          <p className="text-gray-500">No past slots.</p>
+        ) : (
+          <table className="w-full border">
+            <thead>
+              <tr className="bg-gray-100 text-left">
+                <th className="p-2 border">Date</th>
+                <th className="p-2 border">Time</th>
+                <th className="p-2 border">Breaks</th>
+                <th className="p-2 border">Status</th>
+                <th className="p-2 border">Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {historySlots.map((slot) => (
+                <tr key={slot.availabilityId} className="border-b">
+                  <td className="p-2 border">
+                    {format(
+                      typeof slot.availabilityDate === "string"
+                        ? parseISO(slot.availabilityDate)
+                        : slot.availabilityDate,
+                      "dd/MM/yyyy"
+                    )}
+                  </td>
+                  <td className="p-2 border">
+                    {slot.startTime} - {slot.endTime}
+                  </td>
+                  <td className="p-2 border">
+                    {slot.breaks && slot.breaks.length === 0
+                      ? "-"
+                      : slot.breaks
+                          .map((b) => `${b.breakStart} - ${b.breakEnd}`)
+                          .join(", ")}
+                  </td>
+                  <td className="p-2 border">{slot.status}</td>
+                  <td className="p-2 border">{slot.notes || "-"}</td>
                 </tr>
               ))}
             </tbody>

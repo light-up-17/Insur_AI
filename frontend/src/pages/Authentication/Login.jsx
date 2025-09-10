@@ -47,10 +47,10 @@ const Login = ({ setUser }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
-        <h1 className="text-center text-3xl font-extrabold text-gray-900">Insur-AI</h1>
-        <p className="mt-2 text-center text-sm text-gray-600">Corporate Policy Automation System</p>
+        <h1 className="text-center text-3xl font-extrabold text-white">Insur-AI</h1>
+        <p className="mt-2 text-center text-sm text-white">Corporate Policy Automation System</p>
 
         <AuthForm
           mode="login"
@@ -61,7 +61,7 @@ const Login = ({ setUser }) => {
         />
 
         {userCategory && (
-          <p className="text-center text-green-600 font-medium">
+          <p className="text-center text-white font-medium">
             Logged in as <span className="font-bold">{userCategory}</span>
           </p>
         )}

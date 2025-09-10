@@ -9,6 +9,6 @@ import com.insurai.insurai.model.AgentAvailability;
 
 @Repository
 public interface AgentAvailabilityRepository extends JpaRepository<AgentAvailability, Integer> {
-    // Make sure this returns List<AgentAvailability>
     List<AgentAvailability> findByAgentId(String agentId);
+    List<AgentAvailability> findByStatus(String status);
 }

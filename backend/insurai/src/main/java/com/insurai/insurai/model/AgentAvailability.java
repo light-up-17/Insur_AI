@@ -37,7 +37,6 @@ public class AgentAvailability {
     @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
 
-    private String recurring = "None";
     private String status = "Available";
     private String notes;
 
@@ -67,9 +66,6 @@ public class AgentAvailability {
 
     public LocalTime getEndTime() { return endTime; }
     public void setEndTime(LocalTime endTime) { this.endTime = endTime; }
-
-    public String getRecurring() { return recurring; }
-    public void setRecurring(String recurring) { this.recurring = recurring; }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }

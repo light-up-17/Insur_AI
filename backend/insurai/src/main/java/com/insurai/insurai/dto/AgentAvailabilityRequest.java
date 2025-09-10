@@ -9,8 +9,6 @@ public class AgentAvailabilityRequest {
     private LocalDate availabilityDate;
     private LocalTime startTime;
     private LocalTime endTime;
-    private String recurring;
-    private String status;
     private String notes;
     private List<BreakRequest> breaks;
 
@@ -44,22 +42,6 @@ public class AgentAvailabilityRequest {
 
     public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
-    }
-
-    public String getRecurring() {
-        return recurring;
-    }
-
-    public void setRecurring(String recurring) {
-        this.recurring = recurring;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getNotes() {

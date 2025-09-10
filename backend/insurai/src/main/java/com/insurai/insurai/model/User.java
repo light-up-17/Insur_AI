@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
 public class User {
 
     @Id
+    @Column(name = "id", nullable=false)
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
