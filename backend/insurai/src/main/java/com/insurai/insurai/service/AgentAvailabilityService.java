@@ -12,6 +12,7 @@ import com.insurai.insurai.dto.OnlineAgentDTO;
 import com.insurai.insurai.model.AgentAvailability;
 import com.insurai.insurai.model.AgentAvailabilityBreak;
 import com.insurai.insurai.model.User;
+import com.insurai.insurai.model.UserCategory;
 import com.insurai.insurai.repository.AgentAvailabilityRepository;
 import com.insurai.insurai.repository.UserRepository;
 @Service
@@ -66,17 +67,15 @@ public class AgentAvailabilityService {
                 System.out.println("DEBUG: Found user " + user.getFirstName() + " " + user.getLastName() + " for agentId: " + agent.getAgentId());
             }
             OnlineAgentDTO dto = new OnlineAgentDTO();
-            if (user != null && "AGENT".equals(user.getCategory())) {
-                dto.setId(user.getId());
-                dto.setAgentId(user.getId());
+            dto.setId(agent.getAvailabilityId().toString());
+            dto.setAgentId(agent.getAgentId());
+            if (user != null && user.getCategory() == UserCategory.AGENT) {
                 dto.setEmail(user.getEmail());
                 dto.setFirstName(user.getFirstName());
                 dto.setLastName(user.getLastName());
                 dto.setPhone(user.getPhone());
                 dto.setFullName(user.getFirstName() + " " + user.getLastName());
             } else {
-                dto.setId(agent.getAvailabilityId().toString());
-                dto.setAgentId(agent.getAgentId());
                 dto.setFullName(agent.getAgentId());
             }
             dto.setAvailabilityDate(agent.getAvailabilityDate().toString());

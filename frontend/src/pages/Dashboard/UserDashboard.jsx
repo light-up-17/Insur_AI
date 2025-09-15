@@ -66,12 +66,12 @@ const UserDashboard = () => {
           <table className="w-full border-collapse">
             <thead>
               <tr>
+                <th className="border px-2 py-1">Agent ID</th>
                 <th className="border px-2 py-1">Full Name</th>
                 <th className="border px-2 py-1">First Name</th>
                 <th className="border px-2 py-1">Last Name</th>
                 <th className="border px-2 py-1">Email</th>
                 <th className="border px-2 py-1">Phone</th>
-                <th className="border px-2 py-1">Agent ID</th>
                 <th className="border px-2 py-1">Date</th>
                 <th className="border px-2 py-1">Time</th>
                 <th className="border px-2 py-1">Action</th>
@@ -80,12 +80,12 @@ const UserDashboard = () => {
             <tbody>
               {onlineAgents.map((agent) => (
                 <tr key={agent.id}>
+                  <td className="border px-2 py-1">{agent.agentId}</td>
                   <td className="border px-2 py-1">{agent.fullName}</td>
                   <td className="border px-2 py-1">{agent.firstName}</td>
                   <td className="border px-2 py-1">{agent.lastName}</td>
                   <td className="border px-2 py-1">{agent.email}</td>
                   <td className="border px-2 py-1">{agent.phone}</td>
-                  <td className="border px-2 py-1">{agent.agentId}</td>
                   <td className="border px-2 py-1">{agent.availabilityDate}</td>
                   <td className="border px-2 py-1">
                     {agent.startTime} - {agent.endTime}
