@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.insurai.insurai.dto.AgentAvailabilityRequest;
+import com.insurai.insurai.dto.BookedRequestDTO;
 import com.insurai.insurai.dto.OnlineAgentDTO;
 import com.insurai.insurai.model.AgentAvailability;
 import com.insurai.insurai.repository.AgentAvailabilityRepository;
@@ -69,5 +70,10 @@ public class AgentAvailabilityController {
     @GetMapping("/online")
     public ResponseEntity<List<OnlineAgentDTO>> getOnlineAgents() {
         return ResponseEntity.ok(service.getOnlineAgents());
+    }
+
+    @GetMapping("/booked/{agentId}")
+    public ResponseEntity<List<BookedRequestDTO>> getBookedRequests(@PathVariable String agentId) {
+        return ResponseEntity.ok(service.getBookedRequestsByAgentId(agentId));
     }
 }

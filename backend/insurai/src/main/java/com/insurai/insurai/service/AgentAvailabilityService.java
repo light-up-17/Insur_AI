@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.insurai.insurai.dto.AgentAvailabilityRequest;
+import com.insurai.insurai.dto.BookedRequestDTO;
 import com.insurai.insurai.dto.OnlineAgentDTO;
 import com.insurai.insurai.model.AgentAvailability;
 import com.insurai.insurai.model.AgentAvailabilityBreak;
@@ -54,6 +55,40 @@ public class AgentAvailabilityService {
 
     public List<AgentAvailability> getAvailabilityByAgentId(String agentId) {
         return availabilityRepository.findByAgentId(agentId);
+    }
+
+    public List<BookedRequestDTO> getBookedRequestsByAgentId(String agentId) {
+        if (agentId == null || agentId.isEmpty()) {
+            return List.of();
+        }
+        List<AgentAvailability> bookedSlots = availabilityRepository.findByAgentIdAndStatus(agentId, "Booked");
+        return bookedSlots.stream().map(slot -> {
+            String clientName = "Unknown";
+            String email = "N/A";
+            String phone = "N/A";
+            String clientId = slot.getUserId();
+
+            if (slot.getUserId() != null) {
+                User user = userRepository.findById(slot.getUserId()).orElse(null);
+                if (user != null) {
+                    clientName = user.getFirstName() + " " + user.getLastName();
+                    email = user.getEmail();
+                    phone = user.getPhone();
+                }
+            }
+
+            BookedRequestDTO dto = new BookedRequestDTO();
+            dto.setAvailabilityId(slot.getAvailabilityId());
+            dto.setClientId(clientId);
+            dto.setClientName(clientName);
+            dto.setEmail(email);
+            dto.setPhone(phone);
+            dto.setDate(slot.getAvailabilityDate());
+            dto.setStartTime(slot.getStartTime());
+            dto.setEndTime(slot.getEndTime());
+            dto.setStatus(slot.getStatus());
+            return dto;
+        }).collect(Collectors.toList());
     }
 
     public List<OnlineAgentDTO> getOnlineAgents() {

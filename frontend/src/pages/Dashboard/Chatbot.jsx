@@ -16,6 +16,7 @@ const Chatbot = () => {
   ]);
   const [input, setInput] = useState("");
   const [showCommands, setShowCommands] = useState(false);
+  const [isListening, setIsListening] = useState(false);
 
   // Dragging state
   const chatbotRef = useRef(null);
@@ -27,6 +28,42 @@ const Chatbot = () => {
     offsetX: 0,
     offsetY: 0
   });
+
+  // Speech recognition setup
+  const recognitionRef = useRef(null);
+
+  useEffect(() => {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      console.warn("Speech Recognition API not supported in this browser.");
+      return;
+    }
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setInput(transcript);
+      setIsListening(false);
+      // Automatically send the recognized message
+      setTimeout(() => {
+        sendMessage(transcript);
+      }, 100);
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Speech recognition error", event.error);
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognitionRef.current = recognition;
+  }, []);
 
   // Initialize position at bottom-right
   useEffect(() => {
@@ -95,15 +132,16 @@ const Chatbot = () => {
     e.preventDefault();
   };
 
-  const sendMessage = () => {
-    if (!input.trim()) return;
-    const userMessage = { role: "user", content: input };
-    setMessages([...messages, userMessage]);
+  const sendMessage = (messageText) => {
+    const text = messageText !== undefined ? messageText : input;
+    if (!text.trim()) return;
+    const userMessage = { role: "user", content: text };
+    setMessages(prev => [...prev, userMessage]);
     setInput("");
     setShowCommands(false);
 
-    if (input.startsWith("/")) {
-      handleCommand(input);
+    if (text.startsWith("/")) {
+      handleCommand(text);
     } else {
       setTimeout(() => {
         setMessages(prev => [...prev, { role: "bot", content: "I'll process your request..." }]);
@@ -225,6 +263,21 @@ const Chatbot = () => {
                 className="px-3 bg-blue-600 text-white text-sm hover:bg-blue-700"
               >
                 Send
+              </button>
+              <button
+                onClick={() => {
+                  if (isListening) {
+                    recognitionRef.current.stop();
+                    setIsListening(false);
+                  } else {
+                    recognitionRef.current.start();
+                    setIsListening(true);
+                  }
+                }}
+                className={`ml-2 px-3 text-white text-sm rounded ${isListening ? 'bg-red-600' : 'bg-green-600'} hover:opacity-80`}
+                title={isListening ? "Stop Listening" : "Start Voice Input"}
+              >
+                {isListening ? "🎙️ Stop" : "🎙️ Speak"}
               </button>
 
               {/* Command suggestions */}
