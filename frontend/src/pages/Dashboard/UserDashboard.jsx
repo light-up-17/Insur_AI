@@ -35,8 +35,20 @@ const UserDashboard = () => {
 
   const bookAgent = async (id) => {
     setBookingStatus("");
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user || !user.id) {
+      setBookingStatus("User not authenticated.");
+      return;
+    }
+    const userId = user.id;
     try {
-      const res = await fetch(`${API_BASE}/${id}/book`, { method: "PUT" });
+      const res = await fetch(`${API_BASE}/${id}/book`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId }),
+      });
       if (res.ok) {
         setOnlineAgents((prev) => prev.filter((agent) => agent.id !== id));
         setBookingStatus("Agent booked successfully!");

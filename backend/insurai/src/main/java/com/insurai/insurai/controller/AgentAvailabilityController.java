@@ -1,6 +1,7 @@
 package com.insurai.insurai.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -47,10 +48,17 @@ public class AgentAvailabilityController {
     }
 
     @PutMapping("/{id}/book")
-    public ResponseEntity<?> bookSlot(@PathVariable Integer id) {
+    public ResponseEntity<?> bookSlot(@PathVariable Integer id, @RequestBody Map<String, Object> payload) {
         return availabilityRepository.findById(id)
             .map(slot -> {
                 slot.setStatus("Booked");
+
+                // ✅ Save userId as String (varchar)
+                if (payload.containsKey("userId")) {
+                    String userId = payload.get("userId").toString();
+                    slot.setUserId(userId); // make sure AgentAvailability has String userId + setter
+                }
+
                 availabilityRepository.save(slot);
                 return ResponseEntity.ok().build();
             })

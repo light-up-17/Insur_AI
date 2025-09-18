@@ -28,6 +28,9 @@ public class AgentAvailability {
     @Column(name = "agent_id", nullable = false)
     private String agentId;
 
+    @Column(name = "booked_by_user_id")
+    private String userId;
+
     @Column(name = "availability_date", nullable = false)
     private LocalDate availabilityDate;
 
@@ -57,6 +60,9 @@ public class AgentAvailability {
 
     public String getAgentId() { return agentId; }
     public void setAgentId(String agentId) { this.agentId = agentId; }
+
+    public String getUserId() { return userId; }
+    public void setUserId(String userId) { this.userId = userId; }
 
     public LocalDate getAvailabilityDate() { return availabilityDate; }
     public void setAvailabilityDate(LocalDate availabilityDate) { this.availabilityDate = availabilityDate; }
