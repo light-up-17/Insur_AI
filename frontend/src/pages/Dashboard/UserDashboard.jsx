@@ -8,6 +8,10 @@ const UserDashboard = () => {
   const [bookingStatus, setBookingStatus] = useState("");
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState("");
+  const [policies, setPolicies] = useState([]);
+  const [claims, setClaims] = useState([]);
+  const [policiesLoading, setPoliciesLoading] = useState(true);
+  const [claimsLoading, setClaimsLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
@@ -31,6 +35,37 @@ const UserDashboard = () => {
         setFetchError("Could not load agents. Please try again later.");
         console.error("Fetch error:", err);
       });
+  }, []);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.id) {
+      setPoliciesLoading(true);
+      fetch(`http://localhost:8080/api/policies/user/${user.id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setPolicies(data);
+          setPoliciesLoading(false);
+        })
+        .catch((err) => {
+          console.error("Error fetching policies:", err);
+          setPolicies([]);
+          setPoliciesLoading(false);
+        });
+
+      setClaimsLoading(true);
+      fetch(`http://localhost:8080/api/claims/user/${user.id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setClaims(data);
+          setClaimsLoading(false);
+        })
+        .catch((err) => {
+          console.error("Error fetching claims:", err);
+          setClaims([]);
+          setClaimsLoading(false);
+        });
+    }
   }, []);
 
   const bookAgent = async (id) => {
@@ -117,15 +152,42 @@ const UserDashboard = () => {
         )}
       </div>
 
-      {/* Policy section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Policy and Claims section */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* View existing policies */}
         <div className="bg-white p-4 rounded-lg shadow-md">
           <h3 className="text-lg font-semibold mb-2">My Policies</h3>
-          <ul className="list-disc pl-5 text-gray-600">
-            <li>Health Insurance – Active</li>
-            <li>Vehicle Insurance – Expiring Soon</li>
-          </ul>
+          {policiesLoading ? (
+            <p className="text-gray-600">Loading policies...</p>
+          ) : policies.length === 0 ? (
+            <p className="text-gray-600">No policies found.</p>
+          ) : (
+            <ul className="list-disc pl-5 text-gray-600">
+              {policies.map((policy) => (
+                <li key={policy.policyId}>
+                  {policy.type} – {policy.status} (Premium: ${policy.premium})
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        {/* View claims */}
+        <div className="bg-white p-4 rounded-lg shadow-md">
+          <h3 className="text-lg font-semibold mb-2">My Claims</h3>
+          {claimsLoading ? (
+            <p className="text-gray-600">Loading claims...</p>
+          ) : claims.length === 0 ? (
+            <p className="text-gray-600">No claims found.</p>
+          ) : (
+            <ul className="list-disc pl-5 text-gray-600">
+              {claims.map((claim) => (
+                <li key={claim.claimId}>
+                  {claim.description} – {claim.status} (Amount: ${claim.amount})
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         {/* Buy new policy */}

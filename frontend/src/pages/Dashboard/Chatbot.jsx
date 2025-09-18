@@ -2,13 +2,15 @@ import { useState, useRef, useEffect } from "react";
 
 const commandOptions = [
   { cmd: "/generate-receipt", desc: "Generate a payment receipt" },
-  { cmd: "/policy", desc: "Get policy details (Policy No. PXXXXXX)" },
+  { cmd: "/policy", desc: "Get your policy details" },
+  { cmd: "/claim", desc: "Check your claim status" },
+  { cmd: "/agent", desc: "Find available agents" },
   { cmd: "/pdf", desc: "Generate a PDF of documents" },
   { cmd: "/help", desc: "List all available commands" },
 ];
 
 const Chatbot = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
   const [messages, setMessages] = useState([
@@ -140,39 +142,54 @@ const Chatbot = () => {
     setInput("");
     setShowCommands(false);
 
-    if (text.startsWith("/")) {
-      handleCommand(text);
-    } else {
-      setTimeout(() => {
-        setMessages(prev => [...prev, { role: "bot", content: "I'll process your request..." }]);
-      }, 600);
-    }
+    setTimeout(() => {
+      setMessages(prev => [...prev, { role: "bot", content: "I'll process your request..." }]);
+    }, 600);
+
+    // Get user ID from localStorage
+    const user = JSON.parse(localStorage.getItem("user"));
+    const userId = user ? user.id : null;
+
+    // Send query to backend voice-query API
+    fetch("http://localhost:8080/api/voice-query", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ query: text, userId: userId })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.response) {
+        setMessages(prev => [...prev, { role: "bot", content: data.response }]);
+        // Optional: Text-to-Speech
+        if ('speechSynthesis' in window) {
+          const utterance = new SpeechSynthesisUtterance(data.response);
+          window.speechSynthesis.speak(utterance);
+        }
+      } else {
+        setMessages(prev => [...prev, { role: "bot", content: "Sorry, no response from server." }]);
+      }
+    })
+    .catch(err => {
+      setMessages(prev => [...prev, { role: "bot", content: "Error processing request." }]);
+      console.error(err);
+    });
   };
 
-  const handleCommand = (cmd) => {
-    switch (cmd) {
-      case "/help":
-        setMessages(prev => [
-          ...prev,
-          { role: "bot", content: "Available commands: " + commandOptions.map(c => c.cmd).join(", ") },
-        ]);
-        break;
-      case "/generate-receipt":
-        setMessages(prev => [...prev, { role: "bot", content: "✅ Receipt generated. [📄 receipt.pdf]" }]);
-        break;
-      case "/policy":
-        const policyNo = "P" + Math.floor(100000 + Math.random() * 900000);
-        setMessages(prev => [...prev, { role: "bot", content: `📑 Your policy number: ${policyNo}` }]);
-        break;
-      case "/pdf":
-        setMessages(prev => [...prev, { role: "bot", content: "📄 PDF generated successfully." }]);
-        break;
-      default:
-        setMessages(prev => [...prev, { role: "bot", content: "Unknown command. Type /help for options." }]);
-    }
-  };
 
-  if (!isOpen) return null;
+
+  if (!isOpen) {
+    return (
+      <button
+        onClick={() => setIsOpen(true)}
+        className="fixed bottom-4 right-4 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-colors z-50"
+        title="Open InsurAI Assistant"
+      >
+        💬
+      </button>
+    );
+  }
 
   return (
     <>
