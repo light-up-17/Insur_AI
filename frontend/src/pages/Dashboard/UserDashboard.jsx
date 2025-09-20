@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useAuth } from "../../contexts/AuthContext";
 import Chatbot from "./Chatbot";
 
 const API_BASE = "http://localhost:8080/api/availability";
 
 const UserDashboard = () => {
+  const { user, token } = useAuth();
   const [onlineAgents, setOnlineAgents] = useState([]);
   const [bookingStatus, setBookingStatus] = useState("");
   const [loading, setLoading] = useState(true);
@@ -15,7 +17,12 @@ const UserDashboard = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`${API_BASE}/online`)
+    fetch(`${API_BASE}/online`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch");
         return res.json();
@@ -35,13 +42,17 @@ const UserDashboard = () => {
         setFetchError("Could not load agents. Please try again later.");
         console.error("Fetch error:", err);
       });
-  }, []);
+  }, [token]);
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
     if (user && user.id) {
       setPoliciesLoading(true);
-      fetch(`http://localhost:8080/api/policies/user/${user.id}`)
+      fetch(`http://localhost:8080/api/policies/user/${user.id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
         .then((res) => res.json())
         .then((data) => {
           setPolicies(data);
@@ -54,7 +65,12 @@ const UserDashboard = () => {
         });
 
       setClaimsLoading(true);
-      fetch(`http://localhost:8080/api/claims/user/${user.id}`)
+      fetch(`http://localhost:8080/api/claims/user/${user.id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
         .then((res) => res.json())
         .then((data) => {
           setClaims(data);
@@ -66,11 +82,10 @@ const UserDashboard = () => {
           setClaimsLoading(false);
         });
     }
-  }, []);
+  }, [user, token]);
 
   const bookAgent = async (id) => {
     setBookingStatus("");
-    const user = JSON.parse(localStorage.getItem("user"));
     if (!user || !user.id) {
       setBookingStatus("User not authenticated.");
       return;
@@ -80,6 +95,7 @@ const UserDashboard = () => {
       const res = await fetch(`${API_BASE}/${id}/book`, {
         method: "PUT",
         headers: {
+          'Authorization': `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ userId }),

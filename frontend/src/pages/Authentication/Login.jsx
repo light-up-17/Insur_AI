@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 import AuthForm from './AuthForm';
 
-
-const Login = ({ setUser }) => {
+const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [userCategory, setUserCategory] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (err, formData) => {
     if (err) {
@@ -17,34 +17,16 @@ const Login = ({ setUser }) => {
 
     setLoading(true);
     setError('');
-    setUserCategory('');
 
-    try {
-      const response = await fetch('http://localhost:8080/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-          category: formData.category,
-        }),
-      });
+    const result = await login(formData.email, formData.password, formData.category);
 
-      if (!response.ok) throw new Error('Invalid credentials');
-
-      const user = await response.json();
-      console.log('Logged in:', user);
-
-      localStorage.setItem('user', JSON.stringify(user));
-      setUser(user);
-      setUserCategory(user.category);
-
+    if (result.success) {
       navigate('/dashboard');
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
+    } else {
+      setError(result.error);
     }
+
+    setLoading(false);
   };
 
   return (
@@ -71,18 +53,11 @@ const Login = ({ setUser }) => {
             error={error}
             onToggleMode={() => navigate('/signup')}
           />
-
-          {userCategory && (
-            <p className="text-center text-sm mt-3">
-              Logged in as <span className="font-bold">{userCategory}</span>
-            </p>
-          )}
         </div>
       </div>
 
       {/* Right side branding */}
       <div className="w-1/3 bg-[#111111] border-l border-[#333333] flex relative">
-        
         <div className="w-1/3 flex flex-row items-center justify-center">
           <img src="/logo.svg" alt="Insur-AI Logo" className="w-16 h-16 mr-4" />
           <h1 className="text-2xl font-bold text-white">Insur-AI</h1>

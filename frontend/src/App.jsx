@@ -1,42 +1,46 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Login from './pages/Authentication/Login';
 import Signup from './pages/Authentication/Signup';
 import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
 
-function App() {
-  const [user, setUser] = useState(null);
+const AppRoutes = () => {
+  const { user, loading } = useAuth();
 
-  // Load user from localStorage on app load
-  useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-  }, []);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <Router>
-      <Routes>
-        <Route
-          path="/login"
-          element={!user ? <Login setUser={setUser} /> : <Navigate to="/dashboard" replace />}
-        />
-        <Route
-          path="/signup"
-          element={!user ? <Signup /> : <Navigate to="/dashboard" replace />}
-        />
-        <Route
-          path="/dashboard"
-          element={user ? <Dashboard setUser={setUser} /> : <Navigate to="/login" replace />}
-        />
-        <Route
-          path="/"
-          element={!user ? <Home /> : <Navigate to="/dashboard" replace />}
-        />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route
+        path="/login"
+        element={!user ? <Login /> : <Navigate to="/dashboard" replace />}
+      />
+      <Route
+        path="/signup"
+        element={!user ? <Signup /> : <Navigate to="/dashboard" replace />}
+      />
+      <Route
+        path="/dashboard"
+        element={user ? <Dashboard /> : <Navigate to="/login" replace />}
+      />
+      <Route
+        path="/"
+        element={!user ? <Home /> : <Navigate to="/dashboard" replace />}
+      />
+    </Routes>
+  );
+};
+
+function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <AppRoutes />
+      </Router>
+    </AuthProvider>
   );
 }
 

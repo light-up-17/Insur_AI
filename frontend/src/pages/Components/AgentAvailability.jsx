@@ -1,8 +1,10 @@
 // src/pages/AgentAvailability.jsx
 import React, { useState, useEffect } from "react";
 import { format, isBefore, isAfter, parseISO } from "date-fns";
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function AgentAvailability() {
+  const { user, token } = useAuth();
   const [availabilityList, setAvailabilityList] = useState([]);
   const [form, setForm] = useState({
     date: "",
@@ -12,14 +14,20 @@ export default function AgentAvailability() {
     notes: "",
   });
 
-  const agentId = localStorage.getItem("agentId");
+  const agentId = user ? user.id : null;
 
   // Fetch availability slots from backend
   const fetchAvailability = async () => {
     if (!agentId) return;
     try {
       const response = await fetch(
-        `http://localhost:8080/api/availability/${agentId}`
+        `http://localhost:8080/api/availability/${agentId}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
       );
       if (response.ok) {
         const data = await response.json();
@@ -33,7 +41,7 @@ export default function AgentAvailability() {
   useEffect(() => {
     fetchAvailability();
     // eslint-disable-next-line
-  }, [agentId]);
+  }, [agentId, token]);
 
   // Reset form
   const resetForm = () => {
@@ -54,7 +62,7 @@ export default function AgentAvailability() {
     }
 
     if (!agentId) {
-      alert("Agent ID not found in localStorage");
+      alert("User not authenticated");
       return;
     }
 
@@ -74,7 +82,10 @@ export default function AgentAvailability() {
     try {
       const response = await fetch("http://localhost:8080/api/availability", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify(payload),
       });
 

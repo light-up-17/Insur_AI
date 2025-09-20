@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from "../../contexts/AuthContext";
 
 const ClientRequests = () => {
+  const { user, isAuthenticated, token } = useAuth();
   const [activeRequests, setActiveRequests] = useState([]);
   const [historyRequests, setHistoryRequests] = useState([]);
   const [allRequests, setAllRequests] = useState([]);
@@ -28,11 +30,17 @@ const ClientRequests = () => {
   useEffect(() => {
     // Fetch booked requests with user details for the logged-in agent
     const fetchBookedRequests = async () => {
-      const agentId = localStorage.getItem("agentId");
+      // Get agentId from AuthContext instead of localStorage
+      const agentId = user ? user.id : null;
       if (!agentId) return;
 
       try {
-        const response = await fetch(`http://localhost:8080/api/availability/booked/${agentId}`);
+        const response = await fetch(`http://localhost:8080/api/availability/booked/${agentId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
         if (response.ok) {
           const data = await response.json();
           setAllRequests(data);
@@ -43,7 +51,7 @@ const ClientRequests = () => {
     };
 
     fetchBookedRequests();
-  }, []);
+  }, [user, token]);
 
   useEffect(() => {
     const filterRequests = () => {

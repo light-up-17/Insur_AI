@@ -9,4 +9,5 @@ import com.insurai.insurai.model.UserCategory;
 
 public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findByEmailAndCategory(String email, UserCategory category);
+    Optional<User> findByEmail(String email);
 }

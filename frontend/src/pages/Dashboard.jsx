@@ -1,21 +1,17 @@
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import UserDashboard from "./Dashboard/UserDashboard";
 import AgentDashboard from "./Dashboard/AgentDashboard";
 import AdminDashboard from "./Dashboard/AdminDashboard";
 
-const Dashboard = ({ setUser }) => {
+const Dashboard = () => {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
+  const { user, logout } = useAuth();
   const category = user?.category || "USER";
 
-  // Set agentId in localStorage if user is an agent
-  if (category === "AGENT" && user?.id) {
-    localStorage.setItem("agentId", user.id);
-  }
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    setUser(null);   // ✅ clear React state
-    navigate("/login"); // ✅ redirect to login
+    logout();
+    navigate("/login");
   };
 
   return (
@@ -29,7 +25,7 @@ const Dashboard = ({ setUser }) => {
 
           <button
             onClick={handleLogout}
-            className="px-4 py-2 rounded-lg bg-red-600 text-white font-semibold shadow-md 
+            className="px-4 py-2 rounded-lg bg-red-600 text-white font-semibold shadow-md
                        hover:bg-red-700 transition duration-200 ease-in-out"
           >
             Logout

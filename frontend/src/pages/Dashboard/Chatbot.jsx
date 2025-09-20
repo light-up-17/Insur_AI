@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useAuth } from "../../contexts/AuthContext";
 
 const commandOptions = [
   { cmd: "/generate-receipt", desc: "Generate a payment receipt" },
@@ -10,6 +11,7 @@ const commandOptions = [
 ];
 
 const Chatbot = () => {
+  const { user, isAuthenticated, token } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
@@ -77,7 +79,7 @@ const Chatbot = () => {
         y: winHeight - 500 - 20, // 500px height + 20px margin
       });
     };
-    
+
     updateInitialPos();
     window.addEventListener("resize", updateInitialPos);
     return () => window.removeEventListener("resize", updateInitialPos);
@@ -87,10 +89,10 @@ const Chatbot = () => {
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (!dragState.current.isDragging || isMaximized) return;
-      
+
       const newX = e.clientX - dragState.current.offsetX;
       const newY = e.clientY - dragState.current.offsetY;
-      
+
       // Update position directly on the DOM for better performance
       if (chatbotRef.current) {
         chatbotRef.current.style.left = `${newX}px`;
@@ -120,7 +122,7 @@ const Chatbot = () => {
 
   const onMouseDown = (e) => {
     if (isMaximized) return;
-    
+
     const rect = chatbotRef.current.getBoundingClientRect();
     dragState.current = {
       isDragging: true,
@@ -129,7 +131,7 @@ const Chatbot = () => {
       offsetX: e.clientX - rect.left,
       offsetY: e.clientY - rect.top
     };
-    
+
     e.stopPropagation();
     e.preventDefault();
   };
@@ -146,14 +148,14 @@ const Chatbot = () => {
       setMessages(prev => [...prev, { role: "bot", content: "I'll process your request..." }]);
     }, 600);
 
-    // Get user ID from localStorage
-    const user = JSON.parse(localStorage.getItem("user"));
+    // Get user ID from AuthContext instead of localStorage
     const userId = user ? user.id : null;
 
     // Send query to backend voice-query API
     fetch("http://localhost:8080/api/voice-query", {
       method: "POST",
       headers: {
+        'Authorization': `Bearer ${token}`,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({ query: text, userId: userId })
@@ -176,8 +178,6 @@ const Chatbot = () => {
       console.error(err);
     });
   };
-
-
 
   if (!isOpen) {
     return (
@@ -219,20 +219,20 @@ const Chatbot = () => {
         >
           <span className="text-sm font-semibold text-gray-800">InsurAI Assistant</span>
           <div className="flex gap-2">
-            <button 
-              onClick={() => setIsMinimized(!isMinimized)} 
+            <button
+              onClick={() => setIsMinimized(!isMinimized)}
               className="px-1 hover:bg-gray-300 rounded"
             >
               −
             </button>
-            <button 
-              onClick={() => setIsMaximized(!isMaximized)} 
+            <button
+              onClick={() => setIsMaximized(!isMaximized)}
               className="px-1 hover:bg-gray-300 rounded"
             >
               □
             </button>
-            <button 
-              onClick={() => setIsOpen(false)} 
+            <button
+              onClick={() => setIsOpen(false)}
               className="px-1 text-red-600 hover:bg-gray-300 rounded"
             >
               ✕
@@ -275,8 +275,8 @@ const Chatbot = () => {
                 placeholder="Type a message or / for commands..."
                 onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
               />
-              <button 
-                onClick={sendMessage} 
+              <button
+                onClick={sendMessage}
                 className="px-3 bg-blue-600 text-white text-sm hover:bg-blue-700"
               >
                 Send
