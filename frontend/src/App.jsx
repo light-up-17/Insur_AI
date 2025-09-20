@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Login from './pages/Authentication/Login';
 import Signup from './pages/Authentication/Signup';
 import Dashboard from './pages/Dashboard';
+import Home from './pages/Home';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -32,7 +33,7 @@ function App() {
         />
         <Route
           path="/"
-          element={<Navigate to={user ? "/dashboard" : "/login"} replace />}
+          element={!user ? <Home /> : <Navigate to="/dashboard" replace />}
         />
       </Routes>
     </Router>
