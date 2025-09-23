@@ -11,7 +11,7 @@ const commandOptions = [
 ];
 
 const Chatbot = () => {
-  const { user, isAuthenticated, token } = useAuth();
+  const { user, isAuthenticated, token, apiRequest } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
@@ -148,17 +148,10 @@ const Chatbot = () => {
       setMessages(prev => [...prev, { role: "bot", content: "I'll process your request..." }]);
     }, 600);
 
-    // Get user ID from AuthContext instead of localStorage
-    const userId = user ? user.id : null;
-
-    // Send query to backend voice-query API
-    fetch("http://localhost:8080/api/voice-query", {
+    // Send query to backend voice-query API (userId extracted from JWT token)
+    apiRequest("http://localhost:8080/api/voice-query", {
       method: "POST",
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ query: text, userId: userId })
+      body: JSON.stringify({ query: text })
     })
     .then(res => res.json())
     .then(data => {
@@ -169,12 +162,18 @@ const Chatbot = () => {
           const utterance = new SpeechSynthesisUtterance(data.response);
           window.speechSynthesis.speak(utterance);
         }
+      } else if (data.error) {
+        setMessages(prev => [...prev, { role: "bot", content: `Error: ${data.error}` }]);
       } else {
         setMessages(prev => [...prev, { role: "bot", content: "Sorry, no response from server." }]);
       }
     })
     .catch(err => {
-      setMessages(prev => [...prev, { role: "bot", content: "Error processing request." }]);
+      if (err.message === 'Authentication expired') {
+        setMessages(prev => [...prev, { role: "bot", content: "Your session has expired. Please refresh the page and log in again." }]);
+      } else {
+        setMessages(prev => [...prev, { role: "bot", content: "Error processing request. Please try again." }]);
+      }
       console.error(err);
     });
   };
@@ -273,10 +272,15 @@ const Chatbot = () => {
                   setShowCommands(e.target.value === "/");
                 }}
                 placeholder="Type a message or / for commands..."
-                onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    sendMessage();
+                  }
+                }}
               />
               <button
-                onClick={sendMessage}
+                onClick={() => sendMessage()}
                 className="px-3 bg-blue-600 text-white text-sm hover:bg-blue-700"
               >
                 Send

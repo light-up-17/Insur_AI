@@ -15,18 +15,45 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Check for existing token on app load
+  // Check for existing token on app load and validate it
   useEffect(() => {
     const savedToken = localStorage.getItem('token');
     const savedUser = localStorage.getItem('user');
 
     if (savedToken && savedUser) {
-      setToken(savedToken);
-      setUser(JSON.parse(savedUser));
+      // Validate token by making a test request
+      validateToken(savedToken, JSON.parse(savedUser));
+    } else {
+      setLoading(false);
     }
-
-    setLoading(false);
   }, []);
+
+  const validateToken = async (tokenToValidate, userData) => {
+    try {
+      const response = await fetch('http://localhost:8080/api/auth/validate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ token: tokenToValidate })
+      });
+
+      if (response.ok) {
+        setToken(tokenToValidate);
+        setUser(userData);
+      } else {
+        // Token is invalid, clear storage
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      }
+    } catch (error) {
+      console.error('Token validation failed:', error);
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const login = async (email, password, category) => {
     try {
@@ -68,6 +95,61 @@ export const AuthProvider = ({ children }) => {
     return token !== null && user !== null;
   };
 
+  const refreshToken = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/api/auth/refresh', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ refreshToken: token })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setToken(data.token);
+        localStorage.setItem('token', data.token);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Token refresh failed:', error);
+      return false;
+    }
+  };
+
+  const apiRequest = async (url, options = {}) => {
+    const defaultOptions = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+      ...options,
+    };
+
+    try {
+      const response = await fetch(url, defaultOptions);
+
+      // If token is expired, try to refresh it
+      if (response.status === 401) {
+        const refreshed = await refreshToken();
+        if (refreshed) {
+          // Retry the original request with new token
+          defaultOptions.headers.Authorization = `Bearer ${token}`;
+          return fetch(url, defaultOptions);
+        } else {
+          logout();
+          throw new Error('Authentication expired');
+        }
+      }
+
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const value = {
     user,
     token,
@@ -75,6 +157,8 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     isAuthenticated,
+    refreshToken,
+    apiRequest,
   };
 
   return (
