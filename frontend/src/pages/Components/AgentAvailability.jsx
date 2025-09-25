@@ -4,7 +4,7 @@ import { format, isBefore, isAfter, parseISO } from "date-fns";
 import { useAuth } from "../../contexts/AuthContext";
 
 export default function AgentAvailability() {
-  const { user, token } = useAuth();
+  const { user, token, apiRequest } = useAuth();
   const [availabilityList, setAvailabilityList] = useState([]);
   const [form, setForm] = useState({
     date: "",
@@ -20,15 +20,7 @@ export default function AgentAvailability() {
   const fetchAvailability = async () => {
     if (!agentId) return;
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/availability/${agentId}`,
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        }
-      );
+      const response = await apiRequest(`http://localhost:8080/api/availability/${agentId}`);
       if (response.ok) {
         const data = await response.json();
         setAvailabilityList(data);
@@ -80,12 +72,8 @@ export default function AgentAvailability() {
     };
 
     try {
-      const response = await fetch("http://localhost:8080/api/availability", {
+      const response = await apiRequest("http://localhost:8080/api/availability", {
         method: "POST",
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          "Content-Type": "application/json"
-        },
         body: JSON.stringify(payload),
       });
 

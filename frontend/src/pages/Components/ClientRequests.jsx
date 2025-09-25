@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 
 const ClientRequests = () => {
-  const { user, isAuthenticated, token } = useAuth();
+  const { user, isAuthenticated, token, apiRequest } = useAuth();
   const [activeRequests, setActiveRequests] = useState([]);
   const [historyRequests, setHistoryRequests] = useState([]);
   const [allRequests, setAllRequests] = useState([]);
@@ -35,12 +35,7 @@ const ClientRequests = () => {
       if (!agentId) return;
 
       try {
-        const response = await fetch(`http://localhost:8080/api/availability/booked/${agentId}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        });
+        const response = await apiRequest(`http://localhost:8080/api/availability/booked/${agentId}`);
         if (response.ok) {
           const data = await response.json();
           setAllRequests(data);
@@ -51,7 +46,7 @@ const ClientRequests = () => {
     };
 
     fetchBookedRequests();
-  }, [user, token]);
+  }, [user, token, apiRequest]);
 
   useEffect(() => {
     const filterRequests = () => {

@@ -18,6 +18,12 @@ public class ClaimController {
         this.claimService = claimService;
     }
 
+    @GetMapping
+    public ResponseEntity<List<Claim>> getAllClaims() {
+        List<Claim> claims = claimService.getAllClaims();
+        return ResponseEntity.ok(claims);
+    }
+
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Claim>> getClaimsByUserId(@PathVariable String userId) {
         List<Claim> claims = claimService.getClaimsByUserId(userId);
@@ -28,6 +34,12 @@ public class ClaimController {
     public ResponseEntity<Claim> createClaim(@RequestBody Claim claim) {
         Claim savedClaim = claimService.saveClaim(claim);
         return ResponseEntity.ok(savedClaim);
+    }
+
+    @PutMapping("/{claimId}")
+    public ResponseEntity<Claim> updateClaim(@PathVariable String claimId, @RequestBody Claim claim) {
+        Claim updatedClaim = claimService.updateClaim(claimId, claim);
+        return ResponseEntity.ok(updatedClaim);
     }
 
     @DeleteMapping("/{claimId}")
