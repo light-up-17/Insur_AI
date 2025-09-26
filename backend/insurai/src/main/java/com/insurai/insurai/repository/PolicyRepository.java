@@ -12,4 +12,5 @@ public interface PolicyRepository extends JpaRepository<Policy, String> {
     List<Policy> findByUserId(String userId);
     List<Policy> findByUserIdIsNull();
     List<Policy> findByStatus(String status);
+    List<Policy> findByAgentId(String agentId);
 }

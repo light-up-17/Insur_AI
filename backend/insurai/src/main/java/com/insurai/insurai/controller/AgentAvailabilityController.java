@@ -50,20 +50,14 @@ public class AgentAvailabilityController {
 
     @PutMapping("/{id}/book")
     public ResponseEntity<?> bookSlot(@PathVariable Integer id, @RequestBody Map<String, Object> payload) {
-        return availabilityRepository.findById(id)
-            .map(slot -> {
-                slot.setStatus("Booked");
-
-                // ✅ Save userId as String (varchar)
-                if (payload.containsKey("userId")) {
-                    String userId = payload.get("userId").toString();
-                    slot.setUserId(userId); // make sure AgentAvailability has String userId + setter
-                }
-
-                availabilityRepository.save(slot);
+        if (payload.containsKey("userId")) {
+            String userId = payload.get("userId").toString();
+            boolean success = service.bookSlot(id, userId);
+            if (success) {
                 return ResponseEntity.ok().build();
-            })
-            .orElse(ResponseEntity.notFound().build());
+            }
+        }
+        return ResponseEntity.notFound().build();
     }
 
     // UPDATED ENDPOINT: Get all online agents (status = "Available") with full name

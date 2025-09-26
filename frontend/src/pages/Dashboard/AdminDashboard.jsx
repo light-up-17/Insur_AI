@@ -6,7 +6,7 @@ import Dashboard from "../AdminComponents/Dashboard";
 
 const AdminDashboard = ({ showSidebar = true }) => {
   const [activeView, setActiveView] = useState("dashboard");
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleNavigation = (view) => {
@@ -49,20 +49,10 @@ const AdminDashboard = ({ showSidebar = true }) => {
         className={`${
           sidebarCollapsed ? "w-16" : "w-64"
         } bg-gray-800 text-white transition-all duration-300 ease-in-out relative`}
+        onMouseEnter={() => setSidebarCollapsed(false)}
+        onMouseLeave={() => setSidebarCollapsed(true)}
       >
-        {/* Sidebar Header */}
-        <div className="p-4 border-b border-gray-700">
-          <div className="flex items-center justify-between">
-            {!sidebarCollapsed && <h2 className="text-xl font-bold">Admin Panel</h2>}
-            <button
-              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-              className="p-2 rounded-md hover:bg-gray-700 transition-colors"
-              title={sidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
-            >
-              {sidebarCollapsed ? "→" : "←"}
-            </button>
-          </div>
-        </div>
+
 
         {/* Navigation */}
         <nav className="p-4 space-y-2">
@@ -144,43 +134,7 @@ const AdminDashboard = ({ showSidebar = true }) => {
           sidebarCollapsed ? "ml-0" : ""
         }`}
       >
-        {/* Header Bar */}
-        <div className="bg-white shadow-sm border-b border-gray-200 p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                className="p-2 rounded-md hover:bg-gray-100 transition-colors lg:hidden"
-              >
-                ☰
-              </button>
-              <div>
-                <h1 className="text-xl font-semibold text-gray-800">
-                  {activeView === "dashboard" && "Admin Dashboard"}
-                  {activeView === "users" && "User Management"}
-                  {activeView === "agents" && "Agent Management"}
-                  {activeView === "policies" && "Policy & Workflow"}
-                </h1>
-                <p className="text-sm text-gray-600">
-                  {activeView === "dashboard" && "Overview of system performance and key metrics"}
-                  {activeView === "users" && "Manage user accounts, roles, and permissions"}
-                  {activeView === "agents" && "Monitor agent performance and manage activities"}
-                  {activeView === "policies" && "Manage insurance policies and workflow configurations"}
-                </p>
-              </div>
-            </div>
 
-            <div className="flex items-center space-x-3">
-              <div className="hidden md:flex items-center space-x-2 text-sm text-gray-600">
-                <span>🕐</span>
-                <span>{new Date().toLocaleTimeString()}</span>
-              </div>
-              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-medium">A</span>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* Content Area */}
         <div className="p-6">

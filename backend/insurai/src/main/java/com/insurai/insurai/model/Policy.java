@@ -31,6 +31,9 @@ public class Policy {
     @Column(name = "user_id")
     private String userId;
 
+    @Column(name = "agent_id")
+    private String agentId;
+
     @Column(nullable = true)
     private String name;
 

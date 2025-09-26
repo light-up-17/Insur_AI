@@ -40,6 +40,12 @@ public class PolicyController {
         return ResponseEntity.ok(policies);
     }
 
+    @GetMapping("/agent/{agentId}")
+    public ResponseEntity<List<Policy>> getPoliciesByAgentId(@PathVariable String agentId) {
+        List<Policy> policies = policyService.getPoliciesByAgentId(agentId);
+        return ResponseEntity.ok(policies);
+    }
+
     @PostMapping
     public ResponseEntity<Policy> createPolicy(@RequestBody Policy policy) {
         Policy savedPolicy = policyService.savePolicy(policy);

@@ -12,10 +12,12 @@ import com.insurai.insurai.repository.UserRepository;
 @Service
 public class AuthService {
     private final UserRepository userRepository;
+    private final NotificationService notificationService;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public AuthService(UserRepository userRepository) {
+    public AuthService(UserRepository userRepository, NotificationService notificationService) {
         this.userRepository = userRepository;
+        this.notificationService = notificationService;
     }
 
     public User registerUser(User user) {
@@ -26,7 +28,10 @@ public class AuthService {
             user.setCategory(UserCategory.USER);
         }
 
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        // Send welcome notification
+        notificationService.createNotification(savedUser.getId(), "WELCOME", "Welcome to InsurAI! Your account has been created successfully.");
+        return savedUser;
     }
 
     public Optional<User> loginUser(String email, String rawPassword, UserCategory category) {

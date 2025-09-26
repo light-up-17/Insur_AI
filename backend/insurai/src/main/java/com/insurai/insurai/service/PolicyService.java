@@ -13,9 +13,11 @@ import com.insurai.insurai.repository.PolicyRepository;
 public class PolicyService {
 
     private final PolicyRepository policyRepository;
+    private final NotificationService notificationService;
 
-    public PolicyService(PolicyRepository policyRepository) {
+    public PolicyService(PolicyRepository policyRepository, NotificationService notificationService) {
         this.policyRepository = policyRepository;
+        this.notificationService = notificationService;
     }
 
     public List<Policy> getAllPolicies() {
@@ -24,6 +26,10 @@ public class PolicyService {
 
     public List<Policy> getPoliciesByUserId(String userId) {
         return policyRepository.findByUserId(userId);
+    }
+
+    public List<Policy> getPoliciesByAgentId(String agentId) {
+        return policyRepository.findByAgentId(agentId);
     }
 
     public Policy savePolicy(Policy policy) {
@@ -89,6 +95,9 @@ public class PolicyService {
                 .startDate(LocalDate.now())
                 .endDate(template.getEndDate()) // Or calculate
                 .build();
-        return policyRepository.save(purchase);
+        Policy saved = policyRepository.save(purchase);
+        // Notify user
+        notificationService.createNotification(userId, "POLICY_PURCHASE", "You have successfully purchased the policy: " + saved.getName());
+        return saved;
     }
 }

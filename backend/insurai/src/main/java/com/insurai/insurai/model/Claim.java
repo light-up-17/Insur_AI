@@ -1,17 +1,20 @@
 package com.insurai.insurai.model;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
 
 @Entity
 @Table(name = "claims")
@@ -43,4 +46,15 @@ public class Claim {
 
     @Column(name = "date_filed", nullable = false)
     private LocalDate dateFiled;
+
+    @Column(name = "claim_type")
+    private String claimType;
+
+    @Column(name = "date_of_incident", nullable = false)
+    private LocalDate dateOfIncident;
+
+    @ElementCollection
+    @Column(name = "document")
+    @Builder.Default
+    private List<String> documents = new ArrayList<>();
 }

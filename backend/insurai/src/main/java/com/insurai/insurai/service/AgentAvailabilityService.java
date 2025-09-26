@@ -21,11 +21,13 @@ public class AgentAvailabilityService {
 
     private final AgentAvailabilityRepository availabilityRepository;
     private final UserRepository userRepository;
+    private final NotificationService notificationService;
 
     @Autowired
-    public AgentAvailabilityService(AgentAvailabilityRepository availabilityRepository, UserRepository userRepository) {
+    public AgentAvailabilityService(AgentAvailabilityRepository availabilityRepository, UserRepository userRepository, NotificationService notificationService) {
         this.availabilityRepository = availabilityRepository;
         this.userRepository = userRepository;
+        this.notificationService = notificationService;
     }
 
     @Transactional
@@ -118,5 +120,20 @@ public class AgentAvailabilityService {
             dto.setEndTime(agent.getEndTime().toString());
             return dto;
         }).collect(Collectors.toList());
+    }
+
+    public boolean bookSlot(Integer id, String userId) {
+        return availabilityRepository.findById(id)
+            .map(slot -> {
+                slot.setStatus("Booked");
+                slot.setUserId(userId);
+                availabilityRepository.save(slot);
+                // Notify user
+                notificationService.createNotification(userId, "APPOINTMENT_BOOKED", "Your appointment with agent has been booked for " + slot.getAvailabilityDate() + " from " + slot.getStartTime() + " to " + slot.getEndTime());
+                // Notify agent
+                notificationService.createNotification(slot.getAgentId(), "APPOINTMENT_BOOKED", "A new appointment has been booked for " + slot.getAvailabilityDate() + " from " + slot.getStartTime() + " to " + slot.getEndTime());
+                return true;
+            })
+            .orElse(false);
     }
 }
