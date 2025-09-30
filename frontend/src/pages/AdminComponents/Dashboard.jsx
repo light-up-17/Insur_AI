@@ -67,7 +67,7 @@ const Dashboard = ({ handleNavigation }) => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1cb08b]"></div>
       </div>
     );
   }
@@ -75,91 +75,91 @@ const Dashboard = ({ handleNavigation }) => {
   return (
     <>
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-blue-700 mb-2">Admin Dashboard</h2>
-        <p className="text-gray-600">Overview of system performance and key metrics</p>
+        <h2 className="text-2xl font-bold text-white mb-2">Admin Dashboard</h2>
+        <p className="text-gray-400">Overview of system performance and key metrics</p>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         {/* Total Users */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="bg-[#1c1c1c] p-6 rounded-lg shadow-md border border-[#333333]">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-medium text-gray-500">Total Users</h3>
-              <p className="text-2xl font-bold text-blue-600">{stats.totalUsers.toLocaleString()}</p>
-              <p className="text-sm text-green-600 mt-1">+12% from last month</p>
+              <h3 className="text-sm font-medium text-gray-400">Total Users</h3>
+              <p className="text-2xl font-bold text-[#1cb08b]">{stats.totalUsers.toLocaleString()}</p>
+              <p className="text-sm text-[#1cb08b] mt-1">+12% from last month</p>
             </div>
-            <div className="p-3 bg-blue-100 rounded-full">
+            <div className="p-3 bg-[#333333] rounded-full">
               <span className="text-2xl">👥</span>
             </div>
           </div>
         </div>
 
         {/* Active Agents */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="bg-[#1c1c1c] p-6 rounded-lg shadow-md border border-[#333333]">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-medium text-gray-500">Active Agents</h3>
-              <p className="text-2xl font-bold text-green-600">{stats.activeAgents}</p>
-              <p className="text-sm text-green-600 mt-1">98% availability rate</p>
+              <h3 className="text-sm font-medium text-gray-400">Active Agents</h3>
+              <p className="text-2xl font-bold text-[#1cb08b]">{stats.activeAgents}</p>
+              <p className="text-sm text-[#1cb08b] mt-1">98% availability rate</p>
             </div>
-            <div className="p-3 bg-green-100 rounded-full">
+            <div className="p-3 bg-[#333333] rounded-full">
               <span className="text-2xl">🎯</span>
             </div>
           </div>
         </div>
 
         {/* Total Policies */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="bg-[#1c1c1c] p-6 rounded-lg shadow-md border border-[#333333]">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-medium text-gray-500">Total Policies</h3>
-              <p className="text-2xl font-bold text-purple-600">{stats.totalPolicies.toLocaleString()}</p>
-              <p className="text-sm text-green-600 mt-1">+8% this quarter</p>
+              <h3 className="text-sm font-medium text-gray-400">Total Policies</h3>
+              <p className="text-2xl font-bold text-[#1cb08b]">{stats.totalPolicies.toLocaleString()}</p>
+              <p className="text-sm text-[#1cb08b] mt-1">+8% this quarter</p>
             </div>
-            <div className="p-3 bg-purple-100 rounded-full">
+            <div className="p-3 bg-[#333333] rounded-full">
               <span className="text-2xl">📋</span>
             </div>
           </div>
         </div>
 
         {/* Pending Claims */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="bg-[#1c1c1c] p-6 rounded-lg shadow-md border border-[#333333]">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-medium text-gray-500">Pending Claims</h3>
-              <p className="text-2xl font-bold text-orange-600">{stats.pendingClaims}</p>
-              <p className="text-sm text-gray-600 mt-1">Require attention</p>
+              <h3 className="text-sm font-medium text-gray-400">Pending Claims</h3>
+              <p className="text-2xl font-bold text-[#1cb08b]">{stats.pendingClaims}</p>
+              <p className="text-sm text-gray-400 mt-1">Require attention</p>
             </div>
-            <div className="p-3 bg-orange-100 rounded-full">
+            <div className="p-3 bg-[#333333] rounded-full">
               <span className="text-2xl">⚠️</span>
             </div>
           </div>
         </div>
 
         {/* Monthly Revenue */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="bg-[#1c1c1c] p-6 rounded-lg shadow-md border border-[#333333]">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-medium text-gray-500">Monthly Revenue</h3>
-              <p className="text-2xl font-bold text-green-600">{formatCurrency(stats.monthlyRevenue)}</p>
-              <p className="text-sm text-green-600 mt-1">+15% vs last month</p>
+              <h3 className="text-sm font-medium text-gray-400">Monthly Revenue</h3>
+              <p className="text-2xl font-bold text-[#1cb08b]">{formatCurrency(stats.monthlyRevenue)}</p>
+              <p className="text-sm text-[#1cb08b] mt-1">+15% vs last month</p>
             </div>
-            <div className="p-3 bg-green-100 rounded-full">
+            <div className="p-3 bg-[#333333] rounded-full">
               <span className="text-2xl">💰</span>
             </div>
           </div>
         </div>
 
         {/* Active Users */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="bg-[#1c1c1c] p-6 rounded-lg shadow-md border border-[#333333]">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-medium text-gray-500">Active Users</h3>
-              <p className="text-2xl font-bold text-indigo-600">{stats.activeUsers}</p>
-              <p className="text-sm text-green-600 mt-1">71% of total users</p>
+              <h3 className="text-sm font-medium text-gray-400">Active Users</h3>
+              <p className="text-2xl font-bold text-[#1cb08b]">{stats.activeUsers}</p>
+              <p className="text-sm text-[#1cb08b] mt-1">71% of total users</p>
             </div>
-            <div className="p-3 bg-indigo-100 rounded-full">
+            <div className="p-3 bg-[#333333] rounded-full">
               <span className="text-2xl">🔵</span>
             </div>
           </div>
@@ -169,15 +169,15 @@ const Dashboard = ({ handleNavigation }) => {
       {/* Charts and Activity Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Activity */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold mb-4">Recent Activity</h3>
+        <div className="bg-[#1c1c1c] p-6 rounded-lg shadow-md border border-[#333333]">
+          <h3 className="text-lg font-semibold text-white mb-4">Recent Activity</h3>
           <div className="space-y-4">
             {recentActivity.map((activity) => (
-              <div key={activity.id} className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50">
+              <div key={activity.id} className="flex items-start space-x-3 p-3 rounded-lg hover:bg-[#333333]">
                 <span className="text-lg">{getActivityIcon(activity.type)}</span>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-900">{activity.message}</p>
-                  <p className="text-xs text-gray-500">{activity.time}</p>
+                  <p className="text-sm font-medium text-white">{activity.message}</p>
+                  <p className="text-xs text-gray-400">{activity.time}</p>
                 </div>
               </div>
             ))}
@@ -185,33 +185,33 @@ const Dashboard = ({ handleNavigation }) => {
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
+        <div className="bg-[#1c1c1c] p-6 rounded-lg shadow-md border border-[#333333]">
+          <h3 className="text-lg font-semibold text-white mb-4">Quick Actions</h3>
           <div className="grid grid-cols-2 gap-4">
             <button
               onClick={() => handleNavigation("users")}
-              className="p-4 bg-blue-50 hover:bg-blue-100 rounded-lg text-left transition-colors"
+              className="p-4 bg-[#333333] hover:bg-[#999999] rounded-lg text-left transition-colors"
             >
-              <div className="font-medium text-blue-700">User Management</div>
-              <div className="text-sm text-blue-600">Manage user accounts</div>
+              <div className="font-medium text-white">User Management</div>
+              <div className="text-sm text-gray-400">Manage user accounts</div>
             </button>
             <button
               onClick={() => handleNavigation("agents")}
-              className="p-4 bg-green-50 hover:bg-green-100 rounded-lg text-left transition-colors"
+              className="p-4 bg-[#333333] hover:bg-[#999999] rounded-lg text-left transition-colors"
             >
-              <div className="font-medium text-green-700">Agent Oversight</div>
-              <div className="text-sm text-green-600">Monitor agent performance</div>
+              <div className="font-medium text-white">Agent Oversight</div>
+              <div className="text-sm text-gray-400">Monitor agent performance</div>
             </button>
             <button
               onClick={() => handleNavigation("policies")}
-              className="p-4 bg-purple-50 hover:bg-purple-100 rounded-lg text-left transition-colors"
+              className="p-4 bg-[#333333] hover:bg-[#999999] rounded-lg text-left transition-colors"
             >
-              <div className="font-medium text-purple-700">Policy Review</div>
-              <div className="text-sm text-purple-600">Review active policies</div>
+              <div className="font-medium text-white">Policy Review</div>
+              <div className="text-sm text-gray-400">Review active policies</div>
             </button>
-            <button className="p-4 bg-orange-50 hover:bg-orange-100 rounded-lg text-left transition-colors">
-              <div className="font-medium text-orange-700">Claims Processing</div>
-              <div className="text-sm text-orange-600">Process pending claims</div>
+            <button className="p-4 bg-[#333333] hover:bg-[#999999] rounded-lg text-left transition-colors">
+              <div className="font-medium text-white">Claims Processing</div>
+              <div className="text-sm text-gray-400">Process pending claims</div>
             </button>
           </div>
         </div>

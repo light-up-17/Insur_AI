@@ -64,8 +64,27 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
+  const markAllAsRead = async () => {
+    try {
+      const unreadNotifications = notifications.filter(n => !n.isRead);
+      if (unreadNotifications.length === 0) return;
+
+      // Mark all unread notifications as read in bulk
+      const promises = unreadNotifications.map(notification =>
+        apiRequest(`http://localhost:8080/api/notifications/${notification.id}/read`, { method: 'PUT' })
+      );
+
+      await Promise.all(promises);
+
+      setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+      setUnreadCount(0);
+    } catch (error) {
+      console.error('Error marking all as read:', error);
+    }
+  };
+
   return (
-    <NotificationContext.Provider value={{ notifications, unreadCount, markAsRead }}>
+    <NotificationContext.Provider value={{ notifications, unreadCount, markAsRead, markAllAsRead }}>
       {children}
     </NotificationContext.Provider>
   );

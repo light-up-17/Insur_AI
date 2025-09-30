@@ -126,63 +126,63 @@ const Dashboard = () => {
   return (
     <>
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-blue-700 mb-2">User Dashboard</h2>
-        <p className="text-gray-600">Manage your insurance policies and claims</p>
+        <h2 className="text-2xl font-bold text-[#1cb08b] mb-2">User Dashboard</h2>
+        <p className="text-gray-300">Manage your insurance policies and claims</p>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {/* My Policies */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="bg-[#1c1c1c] p-6 rounded-lg shadow-lg border border-[#333333]">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-medium text-gray-500">My Policies</h3>
-              <p className="text-2xl font-bold text-blue-600">{policiesCount}</p>
-              <p className="text-sm text-green-600 mt-1">Active policies</p>
+              <h3 className="text-sm font-medium text-gray-300">My Policies</h3>
+              <p className="text-2xl font-bold text-[#1cb08b]">{policiesCount}</p>
+              <p className="text-sm text-gray-300 mt-1">Active policies</p>
             </div>
-            <div className="p-3 bg-blue-100 rounded-full">
+            <div className="p-3 bg-[#333333] rounded-full">
               <span className="text-2xl">📋</span>
             </div>
           </div>
         </div>
 
         {/* My Claims */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="bg-[#1c1c1c] p-6 rounded-lg shadow-lg border border-[#333333]">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-medium text-gray-500">My Claims</h3>
-              <p className="text-2xl font-bold text-green-600">{claimsCount}</p>
-              <p className="text-sm text-gray-600 mt-1">Total claims filed</p>
+              <h3 className="text-sm font-medium text-gray-300">My Claims</h3>
+              <p className="text-2xl font-bold text-[#1cb08b]">{claimsCount}</p>
+              <p className="text-sm text-gray-300 mt-1">Total claims filed</p>
             </div>
-            <div className="p-3 bg-green-100 rounded-full">
+            <div className="p-3 bg-[#333333] rounded-full">
               <span className="text-2xl">📄</span>
             </div>
           </div>
         </div>
 
         {/* Available Policies */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="bg-[#1c1c1c] p-6 rounded-lg shadow-lg border border-[#333333]">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-medium text-gray-500">Available Policies</h3>
-              <p className="text-2xl font-bold text-purple-600">{availablePolicies.length}</p>
-              <p className="text-sm text-gray-600 mt-1">Browse and purchase</p>
+              <h3 className="text-sm font-medium text-gray-300">Available Policies</h3>
+              <p className="text-2xl font-bold text-[#1cb08b]">{availablePolicies.length}</p>
+              <p className="text-sm text-gray-300 mt-1">Browse and purchase</p>
             </div>
-            <div className="p-3 bg-purple-100 rounded-full">
+            <div className="p-3 bg-[#333333] rounded-full">
               <span className="text-2xl">🛒</span>
             </div>
           </div>
         </div>
 
         {/* Online Agents */}
-        <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="bg-[#1c1c1c] p-6 rounded-lg shadow-lg border border-[#333333]">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-medium text-gray-500">Online Agents</h3>
-              <p className="text-2xl font-bold text-orange-600">{onlineAgentsCount}</p>
-              <p className="text-sm text-gray-600 mt-1">Available for booking</p>
+              <h3 className="text-sm font-medium text-gray-300">Online Agents</h3>
+              <p className="text-2xl font-bold text-[#1cb08b]">{onlineAgentsCount}</p>
+              <p className="text-sm text-gray-300 mt-1">Available for booking</p>
             </div>
-            <div className="p-3 bg-orange-100 rounded-full">
+            <div className="p-3 bg-[#333333] rounded-full">
               <span className="text-2xl">🎯</span>
             </div>
           </div>

@@ -161,19 +161,19 @@ export default function AgentAvailability() {
   }
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      <h1 className="text-2xl font-bold mb-4">Agent Availability Management</h1>
+    <div className="p-6 bg-[#111111] min-h-screen" style={{ fontFamily: "'Inter', sans-serif" }}>
+      <h1 className="text-2xl font-bold mb-4 text-white">Agent Availability Management</h1>
 
       {/* Agent Status Indicator */}
       <div className="mb-4">
-        <span className="font-semibold">Current Status: </span>
+        <span className="font-semibold text-white">Current Status: </span>
         <span
           className={
             agentStatus === "Available"
-              ? "text-green-600"
+              ? "text-green-400"
               : agentStatus === "Booked"
-              ? "text-yellow-600"
-              : "text-red-600"
+              ? "text-yellow-400"
+              : "text-red-400"
           }
         >
           {agentStatus}
@@ -181,54 +181,54 @@ export default function AgentAvailability() {
       </div>
 
       {/* Form Section */}
-      <div className="bg-white shadow-md rounded-xl p-6 mb-6">
-        <h2 className="text-lg font-semibold mb-3">Add Availability Slot</h2>
+      <div className="bg-[#1c1c1c] shadow-md rounded-xl p-6 mb-6 border border-[#333333]">
+        <h2 className="text-lg font-semibold mb-3 text-white">Add Availability Slot</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Date */}
           <div>
-            <label className="block font-medium">Date</label>
+            <label className="block font-medium text-gray-400">Date</label>
             <input
               type="date"
               name="date"
               value={form.date}
               onChange={handleChange}
-              className="border rounded-lg p-2 w-full"
+              className="border border-[#333333] rounded-lg p-2 w-full bg-[#333333] text-white focus:outline-none focus:ring-2 focus:ring-[#1cb08b]"
             />
           </div>
 
           {/* Start Time */}
           <div>
-            <label className="block font-medium">Start Time</label>
+            <label className="block font-medium text-gray-400">Start Time</label>
             <input
               type="time"
               name="startTime"
               value={form.startTime}
               onChange={handleChange}
-              className="border rounded-lg p-2 w-full"
+              className="border border-[#333333] rounded-lg p-2 w-full bg-[#333333] text-white focus:outline-none focus:ring-2 focus:ring-[#1cb08b]"
             />
           </div>
 
           {/* End Time */}
           <div>
-            <label className="block font-medium">End Time</label>
+            <label className="block font-medium text-gray-400">End Time</label>
             <input
               type="time"
               name="endTime"
               value={form.endTime}
               onChange={handleChange}
-              className="border rounded-lg p-2 w-full"
+              className="border border-[#333333] rounded-lg p-2 w-full bg-[#333333] text-white focus:outline-none focus:ring-2 focus:ring-[#1cb08b]"
             />
           </div>
 
           {/* Notes */}
           <div className="md:col-span-2">
-            <label className="block font-medium">Notes</label>
+            <label className="block font-medium text-gray-400">Notes</label>
             <textarea
               name="notes"
               value={form.notes}
               onChange={handleChange}
-              className="border rounded-lg p-2 w-full"
+              className="border border-[#333333] rounded-lg p-2 w-full bg-[#333333] text-white focus:outline-none focus:ring-2 focus:ring-[#1cb08b]"
               placeholder="Special instructions (optional)"
             />
           </div>
@@ -236,7 +236,7 @@ export default function AgentAvailability() {
 
         {/* Breaks */}
         <div className="mt-4">
-          <label className="block font-medium mb-2">Breaks</label>
+          <label className="block font-medium mb-2 text-gray-400">Breaks</label>
           {form.breaks.map((brk, index) => (
             <div key={index} className="flex gap-2 mb-2">
               <input
@@ -245,7 +245,7 @@ export default function AgentAvailability() {
                 onChange={(e) =>
                   handleBreakChange(index, "start", e.target.value)
                 }
-                className="border rounded-lg p-2"
+                className="border border-[#333333] rounded-lg p-2 bg-[#333333] text-white focus:outline-none focus:ring-2 focus:ring-[#1cb08b]"
               />
               <input
                 type="time"
@@ -253,13 +253,13 @@ export default function AgentAvailability() {
                 onChange={(e) =>
                   handleBreakChange(index, "end", e.target.value)
                 }
-                className="border rounded-lg p-2"
+                className="border border-[#333333] rounded-lg p-2 bg-[#333333] text-white focus:outline-none focus:ring-2 focus:ring-[#1cb08b]"
               />
             </div>
           ))}
           <button
             onClick={addBreak}
-            className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded-lg"
+            className="bg-[#333333] hover:bg-[#999999] px-3 py-1 rounded-lg text-white transition-colors"
           >
             + Add Break
           </button>
@@ -267,33 +267,33 @@ export default function AgentAvailability() {
 
         <button
           onClick={addAvailability}
-          className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          className="mt-4 bg-[#1cb08b] text-white px-4 py-2 rounded-lg hover:bg-[#0a8a6a] transition-colors"
         >
           Add Availability
         </button>
       </div>
 
       {/* Active Availability List */}
-      <div className="bg-white shadow-md rounded-xl p-6 mb-6">
-        <h2 className="text-lg font-semibold mb-3">Active Slots</h2>
+      <div className="bg-[#1c1c1c] shadow-md rounded-xl p-6 mb-6 border border-[#333333]">
+        <h2 className="text-lg font-semibold mb-3 text-white">Active Slots</h2>
         {activeSlots.length === 0 ? (
-          <p className="text-gray-500">No active availability slots.</p>
+          <p className="text-gray-400">No active availability slots.</p>
         ) : (
-          <table className="w-full border">
+          <table className="w-full border border-[#333333]">
             <thead>
-              <tr className="bg-gray-100 text-left">
-                <th className="p-2 border">Date</th>
-                <th className="p-2 border">Time</th>
-                <th className="p-2 border">Breaks</th>
-                <th className="p-2 border">Status</th>
-                <th className="p-2 border">Notes</th>
-                <th className="p-2 border">Actions</th>
+              <tr className="bg-[#2a2a2a] text-left">
+                <th className="p-2 border border-[#333333] text-gray-400">Date</th>
+                <th className="p-2 border border-[#333333] text-gray-400">Time</th>
+                <th className="p-2 border border-[#333333] text-gray-400">Breaks</th>
+                <th className="p-2 border border-[#333333] text-gray-400">Status</th>
+                <th className="p-2 border border-[#333333] text-gray-400">Notes</th>
+                <th className="p-2 border border-[#333333] text-gray-400">Actions</th>
               </tr>
             </thead>
             <tbody>
               {activeSlots.map((slot) => (
-                <tr key={slot.availabilityId} className="border-b">
-                  <td className="p-2 border">
+                <tr key={slot.availabilityId} className="border-b border-[#333333] hover:bg-[#2a2a2a]">
+                  <td className="p-2 border border-[#333333] text-white">
                     {format(
                       typeof slot.availabilityDate === "string"
                         ? parseISO(slot.availabilityDate)
@@ -301,22 +301,22 @@ export default function AgentAvailability() {
                       "dd/MM/yyyy"
                     )}
                   </td>
-                  <td className="p-2 border">
+                  <td className="p-2 border border-[#333333] text-white">
                     {slot.startTime} - {slot.endTime}
                   </td>
-                  <td className="p-2 border">
+                  <td className="p-2 border border-[#333333] text-white">
                     {slot.breaks && slot.breaks.length === 0
                       ? "-"
                       : slot.breaks
                           .map((b) => `${b.breakStart} - ${b.breakEnd}`)
                           .join(", ")}
                   </td>
-                  <td className="p-2 border">{slot.status}</td>
-                  <td className="p-2 border">{slot.notes || "-"}</td>
-                  <td className="p-2 border">
+                  <td className="p-2 border border-[#333333] text-white">{slot.status}</td>
+                  <td className="p-2 border border-[#333333] text-white">{slot.notes || "-"}</td>
+                  <td className="p-2 border border-[#333333] text-white">
                     <button
                       onClick={() => deleteAvailability(slot.availabilityId)}
-                      className="text-red-600 hover:underline"
+                      className="text-red-400 hover:text-red-300"
                     >
                       Delete
                     </button>
@@ -329,25 +329,25 @@ export default function AgentAvailability() {
       </div>
 
       {/* History List */}
-      <div className="bg-white shadow-md rounded-xl p-6">
-        <h2 className="text-lg font-semibold mb-3">History</h2>
+      <div className="bg-[#1c1c1c] shadow-md rounded-xl p-6 border border-[#333333]">
+        <h2 className="text-lg font-semibold mb-3 text-white">History</h2>
         {historySlots.length === 0 ? (
-          <p className="text-gray-500">No past slots.</p>
+          <p className="text-gray-400">No past slots.</p>
         ) : (
-          <table className="w-full border">
+          <table className="w-full border border-[#333333]">
             <thead>
-              <tr className="bg-gray-100 text-left">
-                <th className="p-2 border">Date</th>
-                <th className="p-2 border">Time</th>
-                <th className="p-2 border">Breaks</th>
-                <th className="p-2 border">Status</th>
-                <th className="p-2 border">Notes</th>
+              <tr className="bg-[#2a2a2a] text-left">
+                <th className="p-2 border border-[#333333] text-gray-400">Date</th>
+                <th className="p-2 border border-[#333333] text-gray-400">Time</th>
+                <th className="p-2 border border-[#333333] text-gray-400">Breaks</th>
+                <th className="p-2 border border-[#333333] text-gray-400">Status</th>
+                <th className="p-2 border border-[#333333] text-gray-400">Notes</th>
               </tr>
             </thead>
             <tbody>
               {historySlots.map((slot) => (
-                <tr key={slot.availabilityId} className="border-b">
-                  <td className="p-2 border">
+                <tr key={slot.availabilityId} className="border-b border-[#333333] hover:bg-[#2a2a2a]">
+                  <td className="p-2 border border-[#333333] text-white">
                     {format(
                       typeof slot.availabilityDate === "string"
                         ? parseISO(slot.availabilityDate)
@@ -355,18 +355,18 @@ export default function AgentAvailability() {
                       "dd/MM/yyyy"
                     )}
                   </td>
-                  <td className="p-2 border">
+                  <td className="p-2 border border-[#333333] text-white">
                     {slot.startTime} - {slot.endTime}
                   </td>
-                  <td className="p-2 border">
+                  <td className="p-2 border border-[#333333] text-white">
                     {slot.breaks && slot.breaks.length === 0
                       ? "-"
                       : slot.breaks
                           .map((b) => `${b.breakStart} - ${b.breakEnd}`)
                           .join(", ")}
                   </td>
-                  <td className="p-2 border">{slot.status}</td>
-                  <td className="p-2 border">{slot.notes || "-"}</td>
+                  <td className="p-2 border border-[#333333] text-white">{slot.status}</td>
+                  <td className="p-2 border border-[#333333] text-white">{slot.notes || "-"}</td>
                 </tr>
               ))}
             </tbody>

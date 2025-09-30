@@ -36,18 +36,18 @@ const MyPolicies = () => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h3 className="text-lg font-semibold mb-4">My Policies</h3>
+    <div className="bg-[#1c1c1c] p-6 rounded-lg shadow-lg border border-[#333333]">
+      <h3 className="text-lg font-semibold mb-4 text-gray-300">My Policies</h3>
       {policiesLoading ? (
-        <p className="text-gray-600">Loading policies...</p>
+        <p className="text-gray-400">Loading policies...</p>
       ) : policies.length === 0 ? (
-        <p className="text-gray-600">No policies found.</p>
+        <p className="text-gray-400">No policies found.</p>
       ) : (
         <div className="space-y-2 max-h-64 overflow-y-auto">
           {policies.map((policy) => (
-            <div key={policy.policyId} className="border-b pb-2">
-              <p className="font-medium">{policy.type} – {policy.status}</p>
-              <p className="text-sm text-gray-600">Premium: {formatCurrency(policy.premium)}</p>
+            <div key={policy.policyId} className="border-b border-[#333333] pb-2">
+              <p className="font-medium text-gray-300">{policy.type} – <span className="text-[#1cb08b]">{policy.status}</span></p>
+              <p className="text-sm text-gray-400">Premium: {formatCurrency(policy.premium)}</p>
             </div>
           ))}
         </div>

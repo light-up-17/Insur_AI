@@ -63,25 +63,25 @@ const OnlineAgents = () => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h3 className="text-lg font-semibold mb-4">Online Agents</h3>
-      {bookingStatus && <div className="mb-2 text-green-600">{bookingStatus}</div>}
+    <div className="bg-[#1c1c1c] p-6 rounded-lg shadow-lg border border-[#333333]">
+      <h3 className="text-lg font-semibold mb-4 text-gray-300">Online Agents</h3>
+      {bookingStatus && <div className="mb-2 text-green-400">{bookingStatus}</div>}
       {loading ? (
-        <p className="text-gray-600">Loading agents...</p>
+        <p className="text-gray-400">Loading agents...</p>
       ) : fetchError ? (
-        <p className="text-red-600">{fetchError}</p>
+        <p className="text-red-400">{fetchError}</p>
       ) : onlineAgents.length === 0 ? (
-        <p className="text-gray-600">No agents are currently online.</p>
+        <p className="text-gray-400">No agents are currently online.</p>
       ) : (
         <div className="space-y-2 max-h-64 overflow-y-auto">
           {onlineAgents.slice(0, 5).map((agent) => (
-            <div key={agent.id} className="flex justify-between items-center border-b pb-2">
+            <div key={agent.id} className="flex justify-between items-center border-b border-[#333333] pb-2">
               <div>
-                <p className="font-medium">{agent.fullName}</p>
-                <p className="text-sm text-gray-600">{agent.availabilityDate} - {agent.startTime} to {agent.endTime}</p>
+                <p className="font-medium text-gray-300">{agent.fullName}</p>
+                <p className="text-sm text-gray-400">{agent.availabilityDate} - {agent.startTime} to {agent.endTime}</p>
               </div>
               <button
-                className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
+                className="px-3 py-1 bg-[#1cb08b] text-white rounded hover:bg-[#17a77a] text-sm"
                 onClick={() => bookAgent(agent.id)}
               >
                 Book

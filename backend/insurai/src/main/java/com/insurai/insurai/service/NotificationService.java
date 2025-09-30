@@ -21,6 +21,7 @@ public class NotificationService {
         this.objectMapper = new ObjectMapper();
     }
 
+    @SuppressWarnings("UseSpecificCatch")
     public Notification createNotification(String userId, String type, String message) {
         Notification notification = Notification.builder()
                 .userId(userId)

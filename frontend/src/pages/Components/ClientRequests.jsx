@@ -71,28 +71,28 @@ const ClientRequests = () => {
   }, [allRequests]);
 
   const renderTable = (requests) => (
-    <table className="w-full border">
+    <table className="w-full border border-[#333333]" style={{ fontFamily: "'Inter', sans-serif" }}>
       <thead>
-        <tr className="bg-gray-100 text-left">
-          <th className="p-2 border">Client ID</th>
-          <th className="p-2 border">Client</th>
-          <th className="p-2 border">Email</th>
-          <th className="p-2 border">Phone</th>
-          <th className="p-2 border">Date</th>
-          <th className="p-2 border">Time</th>
-          <th className="p-2 border">Status</th>
+        <tr className="bg-[#2a2a2a] text-left">
+          <th className="p-2 border border-[#333333] text-gray-400">Client ID</th>
+          <th className="p-2 border border-[#333333] text-gray-400">Client</th>
+          <th className="p-2 border border-[#333333] text-gray-400">Email</th>
+          <th className="p-2 border border-[#333333] text-gray-400">Phone</th>
+          <th className="p-2 border border-[#333333] text-gray-400">Date</th>
+          <th className="p-2 border border-[#333333] text-gray-400">Time</th>
+          <th className="p-2 border border-[#333333] text-gray-400">Status</th>
         </tr>
       </thead>
       <tbody>
         {requests.map((request) => (
-          <tr key={request.availabilityId} className="border-b">
-            <td className="p-2 border">{request.clientId}</td>
-            <td className="p-2 border">{request.clientName}</td>
-            <td className="p-2 border">{request.email}</td>
-            <td className="p-2 border">{request.phone}</td>
-            <td className="p-2 border">{request.date}</td>
-            <td className="p-2 border">{request.startTime} - {request.endTime}</td>
-            <td className="p-2 border">{request.status}</td>
+          <tr key={request.availabilityId} className="border-b border-[#333333] hover:bg-[#2a2a2a]">
+            <td className="p-2 border border-[#333333] text-white">{request.clientId}</td>
+            <td className="p-2 border border-[#333333] text-white">{request.clientName}</td>
+            <td className="p-2 border border-[#333333] text-white">{request.email}</td>
+            <td className="p-2 border border-[#333333] text-white">{request.phone}</td>
+            <td className="p-2 border border-[#333333] text-white">{request.date}</td>
+            <td className="p-2 border border-[#333333] text-white">{request.startTime} - {request.endTime}</td>
+            <td className="p-2 border border-[#333333] text-white">{request.status}</td>
           </tr>
         ))}
       </tbody>
@@ -100,19 +100,19 @@ const ClientRequests = () => {
   );
 
   return (
-    <div className="mt-4 p-4 bg-white rounded-lg shadow-md">
-      <h3 className="text-lg font-semibold mb-2">Client Requests Management</h3>
+    <div className="mt-4 p-4 bg-[#1c1c1c] rounded-lg shadow-md border border-[#333333]" style={{ fontFamily: "'Inter', sans-serif" }}>
+      <h3 className="text-lg font-semibold mb-2 text-white">Client Requests Management</h3>
 
-      <h4 className="text-md font-semibold mb-2">Active Requests</h4>
+      <h4 className="text-md font-semibold mb-2 text-white">Active Requests</h4>
       {activeRequests.length === 0 ? (
-        <p className="text-gray-600">No active requests found.</p>
+        <p className="text-gray-400">No active requests found.</p>
       ) : (
         renderTable(activeRequests)
       )}
 
-      <h4 className="text-md font-semibold mb-2 mt-4">Request History</h4>
+      <h4 className="text-md font-semibold mb-2 mt-4 text-white">Request History</h4>
       {historyRequests.length === 0 ? (
-        <p className="text-gray-600">No request history found.</p>
+        <p className="text-gray-400">No request history found.</p>
       ) : (
         renderTable(historyRequests)
       )}

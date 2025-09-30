@@ -15,10 +15,10 @@ const AdminDashboard = ({ showSidebar = true }) => {
 
   if (!showSidebar) {
     return (
-      <div className="p-6 bg-gray-100">
+      <div className="p-6 bg-[#111111]">
         {isLoading ? (
           <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1cb08b]"></div>
           </div>
         ) : (
           renderContent()
@@ -43,12 +43,12 @@ const AdminDashboard = ({ showSidebar = true }) => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-[#111111]">
       {/* Left Sidebar */}
       <div
         className={`${
           sidebarCollapsed ? "w-16" : "w-64"
-        } bg-gray-800 text-white transition-all duration-300 ease-in-out relative`}
+        } bg-[#1c1c1c] text-white transition-all duration-300 ease-in-out relative`}
         onMouseEnter={() => setSidebarCollapsed(false)}
         onMouseLeave={() => setSidebarCollapsed(true)}
       >
@@ -60,8 +60,8 @@ const AdminDashboard = ({ showSidebar = true }) => {
             onClick={() => handleNavigation("dashboard")}
             className={`block w-full text-left px-3 py-2 rounded-md transition-all duration-200 ${
               activeView === "dashboard"
-                ? "bg-blue-600 shadow-lg transform scale-105"
-                : "hover:bg-gray-700 hover:translate-x-1"
+                ? "bg-[#1cb08b] shadow-lg transform scale-105"
+                : "hover:bg-[#333333] hover:translate-x-1"
             }`}
             title={sidebarCollapsed ? "Dashboard" : ""}
           >
@@ -75,8 +75,8 @@ const AdminDashboard = ({ showSidebar = true }) => {
             onClick={() => handleNavigation("users")}
             className={`block w-full text-left px-3 py-2 rounded-md transition-all duration-200 ${
               activeView === "users"
-                ? "bg-blue-600 shadow-lg transform scale-105"
-                : "hover:bg-gray-700 hover:translate-x-1"
+                ? "bg-[#1cb08b] shadow-lg transform scale-105"
+                : "hover:bg-[#333333] hover:translate-x-1"
             }`}
             title={sidebarCollapsed ? "User Management" : ""}
           >
@@ -90,8 +90,8 @@ const AdminDashboard = ({ showSidebar = true }) => {
             onClick={() => handleNavigation("agents")}
             className={`block w-full text-left px-3 py-2 rounded-md transition-all duration-200 ${
               activeView === "agents"
-                ? "bg-blue-600 shadow-lg transform scale-105"
-                : "hover:bg-gray-700 hover:translate-x-1"
+                ? "bg-[#1cb08b] shadow-lg transform scale-105"
+                : "hover:bg-[#333333] hover:translate-x-1"
             }`}
             title={sidebarCollapsed ? "Agent Management" : ""}
           >
@@ -105,8 +105,8 @@ const AdminDashboard = ({ showSidebar = true }) => {
             onClick={() => handleNavigation("policies")}
             className={`block w-full text-left px-3 py-2 rounded-md transition-all duration-200 ${
               activeView === "policies"
-                ? "bg-blue-600 shadow-lg transform scale-105"
-                : "hover:bg-gray-700 hover:translate-x-1"
+                ? "bg-[#1cb08b] shadow-lg transform scale-105"
+                : "hover:bg-[#333333] hover:translate-x-1"
             }`}
             title={sidebarCollapsed ? "Policy & Workflow" : ""}
           >
@@ -140,7 +140,7 @@ const AdminDashboard = ({ showSidebar = true }) => {
         <div className="p-6">
           {isLoading ? (
             <div className="flex items-center justify-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1cb08b]"></div>
             </div>
           ) : (
             renderContent()

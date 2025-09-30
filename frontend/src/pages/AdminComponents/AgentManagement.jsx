@@ -80,17 +80,17 @@ const AgentManagement = () => {
 
   const getStatusColor = (status) => {
     switch (status.toLowerCase()) {
-      case "online": return "bg-green-100 text-green-800";
-      case "offline": return "bg-red-100 text-red-800";
-      case "busy": return "bg-yellow-100 text-yellow-800";
-      default: return "bg-gray-100 text-gray-800";
+      case "online": return "bg-[#333333] text-green-400";
+      case "offline": return "bg-[#333333] text-red-400";
+      case "busy": return "bg-[#333333] text-yellow-400";
+      default: return "bg-[#333333] text-gray-400";
     }
   };
 
   const getPerformanceColor = (performance) => {
-    if (performance >= 90) return "text-green-600";
-    if (performance >= 80) return "text-yellow-600";
-    return "text-red-600";
+    if (performance >= 90) return "text-green-400";
+    if (performance >= 80) return "text-yellow-400";
+    return "text-red-400";
   };
 
   const getPerformanceIcon = (performance) => {
@@ -102,34 +102,34 @@ const AgentManagement = () => {
   return (
     <div className="p-6">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-blue-700 mb-2">Agent Management</h2>
-        <p className="text-gray-600">Monitor agent performance and manage agent activities</p>
+        <h2 className="text-2xl font-bold text-white mb-2">Agent Management</h2>
+        <p className="text-gray-400">Monitor agent performance and manage agent activities</p>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h3 className="text-sm font-medium text-gray-500">Total Agents</h3>
-          <p className="text-2xl font-bold text-blue-600">{agents.length}</p>
+        <div className="bg-[#1c1c1c] p-4 rounded-lg shadow-md">
+          <h3 className="text-sm font-medium text-gray-400">Total Agents</h3>
+          <p className="text-2xl font-bold text-[#1cb08b]">{agents.length}</p>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h3 className="text-sm font-medium text-gray-500">Online Agents</h3>
-          <p className="text-2xl font-bold text-green-600">{agents.filter(a => a.status === "Online").length}</p>
+        <div className="bg-[#1c1c1c] p-4 rounded-lg shadow-md">
+          <h3 className="text-sm font-medium text-gray-400">Online Agents</h3>
+          <p className="text-2xl font-bold text-green-400">{agents.filter(a => a.status === "Online").length}</p>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h3 className="text-sm font-medium text-gray-500">Avg Performance</h3>
-          <p className="text-2xl font-bold text-purple-600">
+        <div className="bg-[#1c1c1c] p-4 rounded-lg shadow-md">
+          <h3 className="text-sm font-medium text-gray-400">Avg Performance</h3>
+          <p className="text-2xl font-bold text-purple-400">
             {Math.round(agents.reduce((acc, a) => acc + a.performance, 0) / agents.length)}%
           </p>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h3 className="text-sm font-medium text-gray-500">Total Policies Sold</h3>
-          <p className="text-2xl font-bold text-orange-600">{agents.reduce((acc, a) => acc + a.policiesSold, 0)}</p>
+        <div className="bg-[#1c1c1c] p-4 rounded-lg shadow-md">
+          <h3 className="text-sm font-medium text-gray-400">Total Policies Sold</h3>
+          <p className="text-2xl font-bold text-orange-400">{agents.reduce((acc, a) => acc + a.policiesSold, 0)}</p>
         </div>
       </div>
 
       {/* Filters and Search */}
-      <div className="bg-white p-4 rounded-lg shadow-md mb-6">
+      <div className="bg-[#1c1c1c] p-4 rounded-lg shadow-md mb-6">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1">
             <input
@@ -137,14 +137,14 @@ const AgentManagement = () => {
               placeholder="Search agents by name or email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 bg-[#2a2a2a] text-white border border-[#333333] rounded-md focus:outline-none focus:ring-2 focus:ring-[#1cb08b]"
             />
           </div>
           <div className="md:w-48">
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 bg-[#2a2a2a] text-white border border-[#333333] rounded-md focus:outline-none focus:ring-2 focus:ring-[#1cb08b]"
             >
               <option value="all">All Status</option>
               <option value="online">Online</option>
@@ -156,35 +156,35 @@ const AgentManagement = () => {
       </div>
 
       {/* Agents Table */}
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="bg-[#1c1c1c] rounded-lg shadow-md overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-[#333333]">
+            <thead className="bg-[#2a2a2a]">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Agent</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Performance</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Clients</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Policies Sold</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Agent</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Performance</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Clients</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Policies Sold</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Rating</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-[#1c1c1c] divide-y divide-[#333333]">
               {filteredAgents.map((agent) => (
-                <tr key={agent.id} className="hover:bg-gray-50">
+                <tr key={agent.id} className="hover:bg-[#2a2a2a]">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10">
-                        <div className="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center">
+                        <div className="h-10 w-10 rounded-full bg-[#1cb08b] flex items-center justify-center">
                           <span className="text-sm font-medium text-white">
                             {agent.name.split(' ').map(n => n[0]).join('')}
                           </span>
                         </div>
                       </div>
                       <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">{agent.name}</div>
-                        <div className="text-sm text-gray-500">{agent.email}</div>
+                        <div className="text-sm font-medium text-white">{agent.name}</div>
+                        <div className="text-sm text-gray-400">{agent.email}</div>
                       </div>
                     </div>
                   </td>
@@ -201,17 +201,17 @@ const AgentManagement = () => {
                       </span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{agent.clients}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{agent.policiesSold}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-white">{agent.clients}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-white">{agent.policiesSold}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <span className="text-yellow-400 mr-1">★</span>
-                      <span className="text-sm text-gray-900">{agent.rating}</span>
+                      <span className="text-sm text-white">{agent.rating}</span>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button className="text-blue-600 hover:text-blue-900 mr-3">View Details</button>
-                    <button className="text-gray-600 hover:text-gray-900">Message</button>
+                    <button className="text-[#1cb08b] hover:text-[#0a8a6a] mr-3">View Details</button>
+                    <button className="text-gray-400 hover:text-gray-300">Message</button>
                   </td>
                 </tr>
               ))}

@@ -34,46 +34,46 @@ const UserManagement = () => {
   });
 
   const getStatusColor = (status) => {
-    return status === "Active" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800";
+    return status === "Active" ? "bg-[#333333] text-[#1cb08b]" : "bg-[#333333] text-red-400";
   };
 
   const getRoleColor = (role) => {
     switch (role) {
-      case "Admin": return "bg-purple-100 text-purple-800";
-      case "Agent": return "bg-blue-100 text-blue-800";
-      default: return "bg-gray-100 text-gray-800";
+      case "Admin": return "bg-[#333333] text-purple-400";
+      case "Agent": return "bg-[#333333] text-blue-400";
+      default: return "bg-[#333333] text-gray-400";
     }
   };
 
   return (
     <div className="p-6">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-blue-700 mb-2">User Management</h2>
-        <p className="text-gray-600">Manage user accounts, roles, and permissions</p>
+        <h2 className="text-2xl font-bold text-white mb-2">User Management</h2>
+        <p className="text-gray-400">Manage user accounts, roles, and permissions</p>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h3 className="text-sm font-medium text-gray-500">Total Users</h3>
-          <p className="text-2xl font-bold text-blue-600">{users.length}</p>
+        <div className="bg-[#1c1c1c] p-4 rounded-lg shadow-md border border-[#333333]">
+          <h3 className="text-sm font-medium text-gray-400">Total Users</h3>
+          <p className="text-2xl font-bold text-[#1cb08b]">{users.length}</p>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h3 className="text-sm font-medium text-gray-500">Active Users</h3>
-          <p className="text-2xl font-bold text-green-600">{users.filter(u => u.status === "Active").length}</p>
+        <div className="bg-[#1c1c1c] p-4 rounded-lg shadow-md border border-[#333333]">
+          <h3 className="text-sm font-medium text-gray-400">Active Users</h3>
+          <p className="text-2xl font-bold text-[#1cb08b]">{users.filter(u => u.status === "Active").length}</p>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h3 className="text-sm font-medium text-gray-500">Customers</h3>
-          <p className="text-2xl font-bold text-purple-600">{users.filter(u => u.role === "Customer").length}</p>
+        <div className="bg-[#1c1c1c] p-4 rounded-lg shadow-md border border-[#333333]">
+          <h3 className="text-sm font-medium text-gray-400">Customers</h3>
+          <p className="text-2xl font-bold text-[#1cb08b]">{users.filter(u => u.role === "Customer").length}</p>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h3 className="text-sm font-medium text-gray-500">Admins</h3>
-          <p className="text-2xl font-bold text-orange-600">{users.filter(u => u.role === "Admin").length}</p>
+        <div className="bg-[#1c1c1c] p-4 rounded-lg shadow-md border border-[#333333]">
+          <h3 className="text-sm font-medium text-gray-400">Admins</h3>
+          <p className="text-2xl font-bold text-[#1cb08b]">{users.filter(u => u.role === "Admin").length}</p>
         </div>
       </div>
 
       {/* Filters and Search */}
-      <div className="bg-white p-4 rounded-lg shadow-md mb-6">
+      <div className="bg-[#1c1c1c] p-4 rounded-lg shadow-md mb-6 border border-[#333333]">
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="flex-1">
             <input
@@ -81,14 +81,14 @@ const UserManagement = () => {
               placeholder="Search users by name or email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border border-[#333333] rounded-md focus:outline-none focus:ring-2 focus:ring-[#1cb08b] bg-[#333333] text-white"
             />
           </div>
           <div className="flex gap-2">
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-4 py-2 border border-[#333333] rounded-md focus:outline-none focus:ring-2 focus:ring-[#1cb08b] bg-[#333333] text-white"
             >
               <option value="all">All Status</option>
               <option value="active">Active</option>
@@ -96,7 +96,7 @@ const UserManagement = () => {
             </select>
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+              className="px-4 py-2 bg-[#333333] hover:bg-[#999999] rounded-md transition-colors text-white"
             >
               {showFilters ? 'Hide Filters' : 'Show Filters'}
             </button>
@@ -105,14 +105,14 @@ const UserManagement = () => {
 
         {/* Advanced Filters */}
         {showFilters && (
-          <div className="mt-4 pt-4 border-t border-gray-200">
+          <div className="mt-4 pt-4 border-t border-[#333333]">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Role Filter</label>
+                <label className="block text-sm font-medium text-gray-400 mb-1">Role Filter</label>
                 <select
                   value={filterRole}
                   onChange={(e) => setFilterRole(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-[#333333] rounded-md focus:outline-none focus:ring-2 focus:ring-[#1cb08b] bg-[#333333] text-white"
                 >
                   <option value="all">All Roles</option>
                   <option value="admin">Admin</option>
@@ -121,20 +121,20 @@ const UserManagement = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Sort By</label>
-                <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <label className="block text-sm font-medium text-gray-400 mb-1">Sort By</label>
+                <select className="w-full px-3 py-2 border border-[#333333] rounded-md focus:outline-none focus:ring-2 focus:ring-[#1cb08b] bg-[#333333] text-white">
                   <option value="name">Name</option>
                   <option value="joinDate">Join Date</option>
                   <option value="policies">Policies Count</option>
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Actions</label>
+                <label className="block text-sm font-medium text-gray-400 mb-1">Actions</label>
                 <div className="flex gap-2">
-                  <button className="px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
+                  <button className="px-3 py-2 bg-[#1cb08b] text-white rounded-md hover:bg-[#0a8a6a] transition-colors">
                     Export
                   </button>
-                  <button className="px-3 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors">
+                  <button className="px-3 py-2 bg-[#1cb08b] text-white rounded-md hover:bg-[#0a8a6a] transition-colors">
                     Import
                   </button>
                 </div>
@@ -146,21 +146,21 @@ const UserManagement = () => {
 
       {/* Bulk Actions Bar */}
       {selectedUsers.length > 0 && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+        <div className="bg-[#333333] border border-[#999999] rounded-lg p-4 mb-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <span className="text-sm font-medium text-blue-800">
+              <span className="text-sm font-medium text-white">
                 {selectedUsers.length} user{selectedUsers.length > 1 ? 's' : ''} selected
               </span>
               <button
                 onClick={() => setSelectedUsers([])}
-                className="text-blue-600 hover:text-blue-800 text-sm"
+                className="text-[#1cb08b] hover:text-white text-sm"
               >
                 Clear Selection
               </button>
             </div>
             <div className="flex space-x-2">
-              <button className="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors text-sm">
+              <button className="px-3 py-1 bg-[#1cb08b] text-white rounded-md hover:bg-[#0a8a6a] transition-colors text-sm">
                 Bulk Edit
               </button>
               <button className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors text-sm">
@@ -172,10 +172,10 @@ const UserManagement = () => {
       )}
 
       {/* Users Table */}
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="bg-[#1c1c1c] rounded-lg shadow-md overflow-hidden border border-[#333333]">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-[#333333]">
+            <thead className="bg-[#333333]">
               <tr>
                 <th className="px-6 py-3 text-left">
                   <input
@@ -188,31 +188,31 @@ const UserManagement = () => {
                       }
                     }}
                     checked={selectedUsers.length === filteredUsers.length && filteredUsers.length > 0}
-                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    className="rounded border-[#333333] text-[#1cb08b] focus:ring-[#1cb08b] bg-[#333333]"
                   />
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Policies</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Join Date</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">User</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Role</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Policies</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Join Date</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-[#1c1c1c] divide-y divide-[#333333]">
               {isLoading ? (
                 <tr>
                   <td colSpan="7" className="px-6 py-12 text-center">
                     <div className="flex items-center justify-center">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                      <span className="ml-2 text-gray-600">Loading users...</span>
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#1cb08b]"></div>
+                      <span className="ml-2 text-gray-400">Loading users...</span>
                     </div>
                   </td>
                 </tr>
               ) : filteredUsers.length === 0 ? (
                 <tr>
                   <td colSpan="7" className="px-6 py-12 text-center">
-                    <div className="text-gray-500">
+                    <div className="text-gray-400">
                       <div className="text-4xl mb-4">👥</div>
                       <p className="text-lg font-medium">No users found</p>
                       <p className="text-sm">Try adjusting your search or filter criteria</p>
@@ -221,7 +221,7 @@ const UserManagement = () => {
                 </tr>
               ) : (
                 filteredUsers.map((user) => (
-                  <tr key={user.id} className="hover:bg-gray-50">
+                  <tr key={user.id} className="hover:bg-[#333333]">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <input
                         type="checkbox"
@@ -233,21 +233,21 @@ const UserManagement = () => {
                             setSelectedUsers(selectedUsers.filter(id => id !== user.id));
                           }
                         }}
-                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        className="rounded border-[#333333] text-[#1cb08b] focus:ring-[#1cb08b] bg-[#333333]"
                       />
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-10 w-10">
-                          <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
-                            <span className="text-sm font-medium text-gray-700">
+                          <div className="h-10 w-10 rounded-full bg-[#333333] flex items-center justify-center">
+                            <span className="text-sm font-medium text-white">
                               {user.name.split(' ').map(n => n[0]).join('')}
                             </span>
                           </div>
                         </div>
                         <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                          <div className="text-sm text-gray-500">{user.email}</div>
+                          <div className="text-sm font-medium text-white">{user.name}</div>
+                          <div className="text-sm text-gray-400">{user.email}</div>
                         </div>
                       </div>
                     </td>
@@ -261,30 +261,30 @@ const UserManagement = () => {
                         {user.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{user.policies}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.joinDate}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-white">{user.policies}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">{user.joinDate}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex items-center space-x-2">
                         <button
-                          className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50 transition-colors"
+                          className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-[#333333] transition-colors"
                           title="Edit User"
                         >
                           ✏️
                         </button>
                         <button
-                          className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-50 transition-colors"
+                          className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-[#333333] transition-colors"
                           title="View Details"
                         >
                           👁️
                         </button>
                         <button
-                          className="text-orange-600 hover:text-orange-900 p-1 rounded hover:bg-orange-50 transition-colors"
+                          className="text-orange-600 hover:text-orange-900 p-1 rounded hover:bg-[#333333] transition-colors"
                           title="Reset Password"
                         >
                           🔑
                         </button>
                         <button
-                          className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50 transition-colors"
+                          className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-[#333333] transition-colors"
                           title="Delete User"
                         >
                           🗑️

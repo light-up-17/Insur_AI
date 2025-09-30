@@ -21,6 +21,13 @@ const AuthForm = ({
   });
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [categoryOpen, setCategoryOpen] = useState(false);
+
+  const categories = [
+    { value: 'USER', label: 'User' },
+    { value: 'AGENT', label: 'Agent' },
+    { value: 'ADMIN', label: 'Admin' }
+  ];
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -60,17 +67,30 @@ const AuthForm = ({
         {/* Category dropdown */}
         <div>
           <label className="block text-sm font-bold mb-1 text-white">Category</label>
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            className="w-full bg-[#2b2b2b] border border-gray-700 rounded px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-[#1cb08b] focus:border-[#1cb08b]"
-            required
-          >
-            <option value="USER">User</option>
-            <option value="AGENT">Agent</option>
-            <option value="ADMIN">Admin</option>
-          </select>
+          <div className="relative">
+            <div
+              onClick={() => setCategoryOpen(!categoryOpen)}
+              className="w-full bg-[#2c2c2c] border border-[#333333] rounded px-3 py-2 text-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#1cb08b] focus:border-[#1cb08b]"
+            >
+              {categories.find(cat => cat.value === formData.category)?.label || 'Select Category'}
+            </div>
+            {categoryOpen && (
+              <div className="absolute top-full left-0 right-0 bg-[#2c2c2c] border border-[#333333] rounded mt-1 z-10">
+                {categories.map(cat => (
+                  <div
+                    key={cat.value}
+                    onClick={() => {
+                      setFormData(prev => ({ ...prev, category: cat.value }));
+                      setCategoryOpen(false);
+                    }}
+                    className="px-3 py-2 cursor-pointer hover:bg-[#1cb08b] text-white"
+                  >
+                    {cat.label}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Signup extra fields */}
@@ -184,7 +204,7 @@ const AuthForm = ({
               id="rememberMe"
               checked={rememberMe}
               onChange={() => setRememberMe(!rememberMe)}
-              className="mr-2"
+              className="mr-2 accent-[#1cb08b]"
             />
             <label htmlFor="rememberMe" className="text-sm">Remember me</label>
           </div>
@@ -199,7 +219,7 @@ const AuthForm = ({
                 name="agreeToTerms"
                 checked={formData.agreeToTerms}
                 onChange={handleChange}
-                className="mr-2"
+                className="mr-2 accent-[#1cb08b]"
                 required
               />
               I agree to the Terms and Conditions *
@@ -210,7 +230,7 @@ const AuthForm = ({
                 name="agreeToPolicy"
                 checked={formData.agreeToPolicy}
                 onChange={handleChange}
-                className="mr-2"
+                className="mr-2 accent-[#1cb08b]"
                 required
               />
               I agree to the Privacy Policy *

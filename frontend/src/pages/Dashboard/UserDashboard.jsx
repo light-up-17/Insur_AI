@@ -14,7 +14,7 @@ const UserDashboard = ({ showSidebar = true }) => {
 
   if (!showSidebar) {
     return (
-      <div className="p-6 bg-gray-100">
+      <div className="p-6 bg-[#111111]">
         {renderContent()}
       </div>
     );
@@ -36,16 +36,15 @@ const UserDashboard = ({ showSidebar = true }) => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-[#111111]">
       {/* Left Sidebar */}
       <div
         className={`${
           sidebarCollapsed ? "w-16" : "w-64"
-        } bg-gray-800 text-white transition-all duration-300 ease-in-out relative`}
+        } bg-[#1c1c1c] text-white transition-all duration-300 ease-in-out relative`}
         onMouseEnter={() => setSidebarCollapsed(false)}
         onMouseLeave={() => setSidebarCollapsed(true)}
       >
-
 
         {/* Navigation */}
         <nav className="p-4 space-y-2">
@@ -53,8 +52,8 @@ const UserDashboard = ({ showSidebar = true }) => {
             onClick={() => handleNavigation("dashboard")}
             className={`block w-full text-left px-3 py-2 rounded-md transition-all duration-200 ${
               activeView === "dashboard"
-                ? "bg-blue-600 shadow-lg transform scale-105"
-                : "hover:bg-gray-700 hover:translate-x-1"
+                ? "bg-[#1cb08b] shadow-lg transform scale-105"
+                : "hover:bg-[#333333] hover:translate-x-1"
             }`}
             title={sidebarCollapsed ? "Dashboard" : ""}
           >
@@ -67,8 +66,8 @@ const UserDashboard = ({ showSidebar = true }) => {
             onClick={() => handleNavigation("onlineagents")}
             className={`block w-full text-left px-3 py-2 rounded-md transition-all duration-200 ${
               activeView === "onlineagents"
-                ? "bg-blue-600 shadow-lg transform scale-105"
-                : "hover:bg-gray-700 hover:translate-x-1"
+                ? "bg-[#1cb08b] shadow-lg transform scale-105"
+                : "hover:bg-[#333333] hover:translate-x-1"
             }`}
             title={sidebarCollapsed ? "Online Agents" : ""}
           >
@@ -81,8 +80,8 @@ const UserDashboard = ({ showSidebar = true }) => {
             onClick={() => handleNavigation("mypolicies")}
             className={`block w-full text-left px-3 py-2 rounded-md transition-all duration-200 ${
               activeView === "mypolicies"
-                ? "bg-blue-600 shadow-lg transform scale-105"
-                : "hover:bg-gray-700 hover:translate-x-1"
+                ? "bg-[#1cb08b] shadow-lg transform scale-105"
+                : "hover:bg-[#333333] hover:translate-x-1"
             }`}
             title={sidebarCollapsed ? "My Policies" : ""}
           >
@@ -95,8 +94,8 @@ const UserDashboard = ({ showSidebar = true }) => {
             onClick={() => handleNavigation("myclaims")}
             className={`block w-full text-left px-3 py-2 rounded-md transition-all duration-200 ${
               activeView === "myclaims"
-                ? "bg-blue-600 shadow-lg transform scale-105"
-                : "hover:bg-gray-700 hover:translate-x-1"
+                ? "bg-[#1cb08b] shadow-lg transform scale-105"
+                : "hover:bg-[#333333] hover:translate-x-1"
             }`}
             title={sidebarCollapsed ? "My Claims" : ""}
           >

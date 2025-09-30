@@ -182,8 +182,9 @@ const Chatbot = () => {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-4 right-4 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-colors z-50"
+        className="fixed bottom-4 right-4 bg-[#1cb08b] text-white p-3 rounded-full shadow-lg hover:bg-[#0a8a6a] transition-colors z-50"
         title="Open InsurAI Assistant"
+        style={{ fontFamily: "'Inter', sans-serif" }}
       >
         💬
       </button>
@@ -194,7 +195,7 @@ const Chatbot = () => {
     <>
       {/* Gradient blur background when maximized */}
       {isMaximized && (
-        <div className="fixed inset-0 bg-gradient-to-br from-gray-400/40 to-gray-700/40 backdrop-blur-sm z-40"></div>
+        <div className="fixed inset-0 bg-gradient-to-br from-[#111111]/80 to-[#333333]/80 backdrop-blur-sm z-40"></div>
       )}
 
       <div
@@ -207,32 +208,33 @@ const Chatbot = () => {
           width: isMaximized ? "70%" : "350px",
           height: isMaximized ? "80%" : isMinimized ? "auto" : "500px",
           zIndex: 50,
-          transition: dragState.current.isDragging ? "none" : "transform 0.2s, width 0.3s, height 0.3s"
+          transition: dragState.current.isDragging ? "none" : "transform 0.2s, width 0.3s, height 0.3s",
+          fontFamily: "'Inter', sans-serif"
         }}
-        className="bg-white shadow-2xl rounded-lg overflow-hidden border border-gray-300 flex flex-col"
+        className="bg-[#1c1c1c] shadow-2xl rounded-lg overflow-hidden border border-[#333333] flex flex-col"
       >
         {/* Title bar (draggable) */}
         <div
           onMouseDown={onMouseDown}
-          className="flex justify-between items-center bg-gray-200 px-2 py-1 cursor-move select-none"
+          className="flex justify-between items-center bg-[#333333] px-2 py-1 cursor-move select-none border-b border-[#555555]"
         >
-          <span className="text-sm font-semibold text-gray-800">InsurAI Assistant</span>
+          <span className="text-sm font-semibold text-white">InsurAI Assistant</span>
           <div className="flex gap-2">
             <button
               onClick={() => setIsMinimized(!isMinimized)}
-              className="px-1 hover:bg-gray-300 rounded"
+              className="px-1 hover:bg-[#555555] rounded text-gray-300 hover:text-white transition-colors"
             >
               −
             </button>
             <button
               onClick={() => setIsMaximized(!isMaximized)}
-              className="px-1 hover:bg-gray-300 rounded"
+              className="px-1 hover:bg-[#555555] rounded text-gray-300 hover:text-white transition-colors"
             >
               □
             </button>
             <button
               onClick={() => setIsOpen(false)}
-              className="px-1 text-red-600 hover:bg-gray-300 rounded"
+              className="px-1 text-red-400 hover:bg-[#555555] rounded hover:text-red-300 transition-colors"
             >
               ✕
             </button>
@@ -242,18 +244,18 @@ const Chatbot = () => {
         {!isMinimized && (
           <>
             {/* Messages */}
-            <div className="flex-1 p-2 overflow-y-auto text-sm space-y-2 bg-gray-50">
+            <div className="flex-1 p-2 overflow-y-auto text-sm space-y-2 bg-[#111111]">
               {messages.map((msg, idx) => (
                 <div
                   key={idx}
                   className={`p-2 rounded-md max-w-[80%] ${
-                    msg.role === "user" ? "bg-blue-100 ml-auto" : "bg-gray-200"
+                    msg.role === "user" ? "bg-[#1cb08b] ml-auto text-white" : "bg-[#333333] text-gray-200"
                   }`}
                 >
                   {msg.content.includes("[📄") ? (
                     <div className="flex items-center gap-2">
                       <span>{msg.content}</span>
-                      <span className="text-blue-600 cursor-pointer">⬇</span>
+                      <span className="text-[#1cb08b] cursor-pointer hover:text-[#0a8a6a]">⬇</span>
                     </div>
                   ) : (
                     <span>{msg.content}</span>
@@ -263,9 +265,9 @@ const Chatbot = () => {
             </div>
 
             {/* Input */}
-            <div className="flex border-t border-gray-300 relative">
+            <div className="flex border-t border-[#333333] relative">
               <input
-                className="flex-1 p-2 text-sm outline-none"
+                className="flex-1 p-2 text-sm outline-none bg-[#333333] text-white placeholder-gray-400 focus:ring-2 focus:ring-[#1cb08b] border border-[#333333]"
                 value={input}
                 onChange={(e) => {
                   setInput(e.target.value);
@@ -281,7 +283,7 @@ const Chatbot = () => {
               />
               <button
                 onClick={() => sendMessage()}
-                className="px-3 bg-blue-600 text-white text-sm hover:bg-blue-700"
+                className="px-3 bg-[#1cb08b] text-white text-sm hover:bg-[#0a8a6a] transition-colors"
               >
                 Send
               </button>
@@ -295,7 +297,7 @@ const Chatbot = () => {
                     setIsListening(true);
                   }
                 }}
-                className={`ml-2 px-3 text-white text-sm rounded ${isListening ? 'bg-red-600' : 'bg-green-600'} hover:opacity-80`}
+                className={`ml-2 px-3 text-white text-sm rounded transition-colors ${isListening ? 'bg-red-600 hover:bg-red-700' : 'bg-[#1cb08b] hover:bg-[#0a8a6a]'}`}
                 title={isListening ? "Stop Listening" : "Start Voice Input"}
               >
                 {isListening ? "🎙️ Stop" : "🎙️ Speak"}
@@ -303,7 +305,7 @@ const Chatbot = () => {
 
               {/* Command suggestions */}
               {showCommands && (
-                <div className="absolute bottom-10 left-0 right-0 bg-white shadow-lg border rounded-md text-sm z-50 mx-2">
+                <div className="absolute bottom-10 left-0 right-0 bg-[#1c1c1c] shadow-lg border border-[#333333] rounded-md text-sm z-50 mx-2">
                   {commandOptions.map((cmd, idx) => (
                     <div
                       key={idx}
@@ -311,9 +313,9 @@ const Chatbot = () => {
                         setInput(cmd.cmd);
                         setShowCommands(false);
                       }}
-                      className="px-2 py-1 hover:bg-gray-100 cursor-pointer"
+                      className="px-2 py-1 hover:bg-[#333333] cursor-pointer text-gray-200 hover:text-white transition-colors"
                     >
-                      <span className="font-bold">{cmd.cmd}</span> – {cmd.desc}
+                      <span className="font-bold text-[#1cb08b]">{cmd.cmd}</span> – {cmd.desc}
                     </div>
                   ))}
                 </div>

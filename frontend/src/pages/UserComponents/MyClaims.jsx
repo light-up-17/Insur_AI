@@ -136,37 +136,37 @@ const MyClaims = () => {
   const claimTypes = ['Health', 'Accident', 'Vehicle Damage', 'Theft', 'Other'];
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h3 className="text-lg font-semibold mb-4">My Claims</h3>
+    <div className="bg-[#1c1c1c] p-6 rounded-lg shadow-lg border border-[#333333]">
+      <h3 className="text-lg font-semibold mb-4 text-gray-300">My Claims</h3>
 
       {/* Claim Creation Form */}
       <button
         onClick={() => setShowForm(!showForm)}
-        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        className="mb-4 px-4 py-2 bg-[#1cb08b] text-white rounded hover:bg-[#17a77a]"
       >
         {showForm ? 'Cancel' : 'Create New Claim'}
       </button>
 
       {showForm && (
-        <div className="mb-6 p-4 border rounded">
-          <p className="mb-4 text-gray-700">
+        <div className="mb-6 p-4 border border-[#333333] rounded bg-[#111111]">
+          <p className="mb-4 text-gray-400">
             You have purchased a policy. If you wish to raise a claim for this policy, please provide the following details. Once submitted, your claim request will be sent to the assigned Agent and Admin for review and approval.
           </p>
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Policy ID / Number *</label>
+                <label className="block text-sm font-medium mb-1 text-gray-300">Policy ID / Number *</label>
                 <select
                   name="policyId"
                   value={formData.policyId}
                   onChange={handleChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border border-[#333333] rounded bg-[#1c1c1c] text-gray-300"
                   required
                   disabled={policiesLoading}
                 >
-                  <option value="">Select a policy</option>
+                  <option value="" className="bg-[#1c1c1c] text-gray-300">Select a policy</option>
                   {policies.map((policy) => (
-                    <option key={policy.policyId} value={policy.policyId}>
+                    <option key={policy.policyId} value={policy.policyId} className="bg-[#1c1c1c] text-gray-300">
                       {policy.policyId} - {policy.type}
                     </option>
                   ))}
@@ -174,29 +174,29 @@ const MyClaims = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Claim Type *</label>
+                <label className="block text-sm font-medium mb-1 text-gray-300">Claim Type *</label>
                 <select
                   name="claimType"
                   value={formData.claimType}
                   onChange={handleChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border border-[#333333] rounded bg-[#1c1c1c] text-gray-300"
                   required
                 >
-                  <option value="">Select claim type</option>
+                  <option value="" className="bg-[#1c1c1c] text-gray-300">Select claim type</option>
                   {claimTypes.map((type) => (
-                    <option key={type} value={type}>{type}</option>
+                    <option key={type} value={type} className="bg-[#1c1c1c] text-gray-300">{type}</option>
                   ))}
                 </select>
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Claim Amount Requested (INR) *</label>
+                <label className="block text-sm font-medium mb-1 text-gray-300">Claim Amount Requested (INR) *</label>
                 <input
                   type="number"
                   name="amount"
                   value={formData.amount}
                   onChange={handleChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border border-[#333333] rounded bg-[#1c1c1c] text-gray-300"
                   required
                   min="0"
                   step="0.01"
@@ -204,25 +204,25 @@ const MyClaims = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Date of Incident *</label>
+                <label className="block text-sm font-medium mb-1 text-gray-300">Date of Incident *</label>
                 <input
                   type="date"
                   name="dateOfIncident"
                   value={formData.dateOfIncident}
                   onChange={handleChange}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border border-[#333333] rounded bg-[#1c1c1c] text-gray-300"
                   required
                 />
               </div>
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Description of Incident *</label>
+              <label className="block text-sm font-medium mb-1 text-gray-300">Description of Incident *</label>
               <textarea
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border border-[#333333] rounded bg-[#1c1c1c] text-gray-300"
                 rows="3"
                 placeholder="Brief explanation of what happened"
                 required
@@ -230,13 +230,13 @@ const MyClaims = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Supporting Documents (Optional)</label>
+              <label className="block text-sm font-medium mb-1 text-gray-300">Supporting Documents (Optional)</label>
               <p className="text-sm text-gray-500 mb-2">For now, file upload is not implemented. You can describe or provide URLs.</p>
               <textarea
                 name="documents"
                 value={formData.documents.join(', ')}
                 onChange={(e) => setFormData(prev => ({ ...prev, documents: e.target.value.split(',').map(d => d.trim()).filter(d => d) }))}
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border border-[#333333] rounded bg-[#1c1c1c] text-gray-300"
                 rows="2"
                 placeholder="Enter file names or URLs separated by commas"
               />
@@ -245,7 +245,7 @@ const MyClaims = () => {
             <button
               type="submit"
               disabled={submitting || policiesLoading}
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 disabled:opacity-50"
+              className="px-4 py-2 bg-[#1cb08b] text-white rounded hover:bg-[#17a77a] disabled:opacity-50"
             >
               {submitting ? 'Submitting...' : 'Submit Claim'}
             </button>
@@ -255,16 +255,16 @@ const MyClaims = () => {
 
       {/* Claims List */}
       {claimsLoading ? (
-        <p className="text-gray-600">Loading claims...</p>
+        <p className="text-gray-400">Loading claims...</p>
       ) : claims.length === 0 ? (
-        <p className="text-gray-600">No claims found.</p>
+        <p className="text-gray-400">No claims found.</p>
       ) : (
         <div className="space-y-2 max-h-64 overflow-y-auto">
           {claims.map((claim) => (
-            <div key={claim.claimId} className="border-b pb-2">
-              <p className="font-medium">{claim.description} – {claim.status} {claim.claimType ? `(${claim.claimType})` : ''}</p>
-              <p className="text-sm text-gray-600">Amount: {formatCurrency(claim.amount)}</p>
-              {claim.dateOfIncident && <p className="text-sm text-gray-600">Incident Date: {new Date(claim.dateOfIncident).toLocaleDateString()}</p>}
+            <div key={claim.claimId} className="border-b border-[#333333] pb-2">
+              <p className="font-medium text-gray-300">{claim.description} – {claim.status} {claim.claimType ? `(${claim.claimType})` : ''}</p>
+              <p className="text-sm text-gray-400">Amount: {formatCurrency(claim.amount)}</p>
+              {claim.dateOfIncident && <p className="text-sm text-gray-400">Incident Date: {new Date(claim.dateOfIncident).toLocaleDateString()}</p>}
             </div>
           ))}
         </div>

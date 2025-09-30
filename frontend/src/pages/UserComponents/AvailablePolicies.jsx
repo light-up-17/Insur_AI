@@ -40,23 +40,23 @@ const AvailablePolicies = ({ onBuyPolicy }) => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h3 className="text-lg font-semibold mb-4">Available Policies</h3>
+    <div className="bg-[#1c1c1c] p-6 rounded-lg shadow-lg border border-[#333333]">
+      <h3 className="text-lg font-semibold mb-4 text-gray-300">Available Policies</h3>
       {availableLoading ? (
-        <p className="text-gray-600">Loading available policies...</p>
+        <p className="text-gray-400">Loading available policies...</p>
       ) : availablePolicies.length === 0 ? (
-        <p className="text-gray-600">No policies available.</p>
+        <p className="text-gray-400">No policies available.</p>
       ) : (
         <div className="space-y-2 max-h-64 overflow-y-auto">
           {availablePolicies.map((policy) => (
-            <div key={policy.policyId} className="flex justify-between items-center border-b pb-2">
+            <div key={policy.policyId} className="flex justify-between items-center border-b border-[#333333] pb-2">
               <div>
-                <p className="font-medium">{policy.type}</p>
-                <p className="text-sm text-gray-600">Premium: {formatCurrency(policy.premium)}/month</p>
-                <p className="text-sm text-gray-600">Coverage: {formatCurrency(policy.coverage)}</p>
+                <p className="font-medium text-gray-300">{policy.type}</p>
+                <p className="text-sm text-gray-400">Premium: {formatCurrency(policy.premium)}/month</p>
+                <p className="text-sm text-gray-400">Coverage: {formatCurrency(policy.coverage)}</p>
               </div>
               <button
-                className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-sm"
+                className="px-3 py-1 bg-[#1cb08b] text-white rounded hover:bg-[#17a77a] text-sm"
                 onClick={() => handleBuy(policy.policyId)}
               >
                 Buy
