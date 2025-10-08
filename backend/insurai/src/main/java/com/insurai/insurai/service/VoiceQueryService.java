@@ -8,110 +8,36 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.insurai.insurai.model.AgentAvailability;
-import com.insurai.insurai.model.Claim;
-import com.insurai.insurai.model.Policy;
-import com.insurai.insurai.model.User;
-import com.insurai.insurai.repository.AgentAvailabilityRepository;
-import com.insurai.insurai.repository.ClaimRepository;
-import com.insurai.insurai.repository.PolicyRepository;
-import com.insurai.insurai.repository.UserRepository;
-
 @Service
 public class VoiceQueryService {
 
-    private final PolicyRepository policyRepository;
-    private final ClaimRepository claimRepository;
-    private final UserRepository userRepository;
-    private final AgentAvailabilityRepository agentAvailabilityRepository;
     private final WebClient webClient;
     private final String apiKey;
 
-    public VoiceQueryService(PolicyRepository policyRepository, ClaimRepository claimRepository,
-                             UserRepository userRepository, AgentAvailabilityRepository agentAvailabilityRepository,
-                             @Value("${gemini.api.key:}") String apiKey) {
-        this.policyRepository = policyRepository;
-        this.claimRepository = claimRepository;
-        this.userRepository = userRepository;
-        this.agentAvailabilityRepository = agentAvailabilityRepository;
+    public VoiceQueryService(@Value("${gemini.api.key:}") String apiKey) {
         this.apiKey = apiKey;
         this.webClient = WebClient.builder()
                 .baseUrl("https://generativelanguage.googleapis.com")
                 .build();
     }
 
-    public String processQuery(String query, String userId) {
+    public String processQuery(String query) {
         if (apiKey == null || apiKey.isEmpty()) {
             // No API key, use fallback
-            return fallbackProcessQuery(query, userId);
+            return fallbackProcessQuery(query);
         }
 
         try {
-            // Fetch user data
-            List<Policy> policies = policyRepository.findByUserId(userId);
-            List<Claim> claims = claimRepository.findByUserId(userId);
-            User user = userRepository.findById(userId).orElse(null);
-            List<AgentAvailability> agents = agentAvailabilityRepository.findAll();
-
-            // Build context
-            StringBuilder context = new StringBuilder();
-            if (user != null) {
-                String name = (user.getFirstName() != null ? user.getFirstName() : "") + " " + (user.getLastName() != null ? user.getLastName() : "").trim();
-                context.append("User Details:\n");
-                context.append("- Name: ").append(name)
-                        .append(", Email: ").append(user.getEmail())
-                        .append(", Role: ").append(user.getCategory())
-                        .append("\n\n");
-            }
-
-            context.append("User Policies:\n");
-            if (policies.isEmpty()) {
-                context.append("No policies found.\n");
-            } else {
-                for (Policy policy : policies) {
-                    context.append("- Policy ID: ").append(policy.getPolicyId())
-                            .append(", Type: ").append(policy.getType())
-                            .append(", Status: ").append(policy.getStatus())
-                            .append(", Premium: $").append(policy.getPremium())
-                            .append("\n");
-                }
-            }
-
-            context.append("\nUser Claims:\n");
-            if (claims.isEmpty()) {
-                context.append("No claims found.\n");
-            } else {
-                for (Claim claim : claims) {
-                    context.append("- Claim ID: ").append(claim.getClaimId())
-                            .append(", Description: ").append(claim.getDescription())
-                            .append(", Status: ").append(claim.getStatus())
-                            .append(", Amount: $").append(claim.getAmount())
-                            .append("\n");
-                }
-            }
-
-            context.append("\nAvailable Agents:\n");
-            if (agents.isEmpty()) {
-                context.append("No agents available.\n");
-            } else {
-                for (AgentAvailability agent : agents) {
-                    context.append("- Availability ID: ").append(agent.getAvailabilityId())
-                            .append(", Agent ID: ").append(agent.getAgentId())
-                            .append(", Status: ").append(agent.getStatus())
-                            .append(", Notes: ").append(agent.getNotes() != null ? agent.getNotes() : "None")
-                            .append("\n");
-                }
-            }
+            // No DB access, use generic context
+            String context = "User data not available due to DB removal.\n";
 
             // Create prompt for Gemini
             String prompt = "You are an AI assistant for an insurance company called InsurAI. " +
                     "You must restrict your responses to insurance-related topics only, such as policies, claims, agents, and general insurance advice. " +
                     "Do not answer questions outside of this scope. " +
-                    "Answer the user's query based on the following user data:\n\n" +
-                    context.toString() +
-                    "\nUser Query: " + query +
-                    "\n\nProvide a helpful, concise response. If the query is about policies, claims, or agents, reference the data above. " +
-                    "If it's a general insurance question, answer helpfully. For actions like generating receipts or PDFs, confirm the action. " +
+                    "Answer the user's query based on general knowledge since user data is not available.\n\n" +
+                    "User Query: " + query +
+                    "\n\nProvide a helpful, concise response. For actions like generating receipts or PDFs, confirm the action. " +
                     "If the query is not related to insurance, politely decline to answer.";
 
             // Prepare request body
@@ -150,15 +76,15 @@ public class VoiceQueryService {
             }
 
             // If parsing fails, fallback
-            return fallbackProcessQuery(query, userId);
+            return fallbackProcessQuery(query);
 
         } catch (Exception e) {
             // Fallback to basic processing if Gemini fails
-            return fallbackProcessQuery(query, userId);
+            return fallbackProcessQuery(query);
         }
     }
 
-    private String fallbackProcessQuery(String query, String userId) {
+    private String fallbackProcessQuery(String query) {
         String lowerQuery = query.toLowerCase();
         String[] tokens = lowerQuery.split("\\s+");
 
@@ -168,37 +94,13 @@ public class VoiceQueryService {
         } else if (containsAny(tokens, "receipt", "generate", "payment", "bill")) {
             return "✅ Receipt generated. [📄 receipt.pdf]";
         } else if (containsAny(tokens, "policy", "details", "information")) {
-            List<Policy> policies = policyRepository.findByUserId(userId);
-            if (policies.isEmpty()) {
-                return "No policies found for your account.";
-            }
-            StringBuilder response = new StringBuilder("📑 Your policies:\n");
-            for (Policy policy : policies) {
-                response.append("Policy ID: ").append(policy.getPolicyId())
-                        .append(", Type: ").append(policy.getType())
-                        .append(", Status: ").append(policy.getStatus())
-                        .append(", Premium: $").append(policy.getPremium())
-                        .append("\n");
-            }
-            return response.toString();
+            return "📑 Policies provide financial protection against various risks. Types include health, auto, home, and life insurance. Contact an agent for personalized details.";
         } else if (containsAny(tokens, "claim", "status")) {
-            List<Claim> claims = claimRepository.findByUserId(userId);
-            if (claims.isEmpty()) {
-                return "No claims found for your account.";
-            }
-            StringBuilder response = new StringBuilder("📋 Your claims:\n");
-            for (Claim claim : claims) {
-                response.append("Claim ID: ").append(claim.getClaimId())
-                        .append(", Description: ").append(claim.getDescription())
-                        .append(", Status: ").append(claim.getStatus())
-                        .append(", Amount: $").append(claim.getAmount())
-                        .append("\n");
-            }
-            return response.toString();
+            return "📋 Claims are requests for payment from your insurance policy. Status can be pending, approved, or denied. Check your policy for claim procedures.";
         } else if (containsAny(tokens, "pdf", "document", "file", "download")) {
             return "📄 PDF generated successfully.";
         } else {
-            return "I'm sorry, I didn't understand that. Type /help for available commands.";
+            return "As an InsurAI assistant, I can help with insurance-related questions. Please ask about policies, claims, agents, or use /help for commands.";
         }
     }
 
